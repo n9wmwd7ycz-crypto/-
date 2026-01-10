@@ -1,5 +1,4 @@
 -- [[ 🐾 NEKO TERMINAL - 2026 REDMI PAD EDITION 🐾 ]] --
--- 最佳解析度建議：小米 / 紅米平板全系列 (大螢幕優化版)
 
 local Players           = game:GetService("Players")
 local localPlayer       = Players.LocalPlayer
@@ -10,13 +9,21 @@ if getgenv().NEKO_RUNNING then return end
 getgenv().NEKO_RUNNING = true
 
 -- =============================================================
--- 🛡️ 1. 白名單驗證
+-- 🛡️ 1. 白名單驗證 (最新更新版)
 -- =============================================================
 local Whitelist = {
-    ["Kadys5373"] = true, ["Zadrian664"] = true, ["Zn6xx"] = true,
-    ["jay04_23"] = true, ["iandsere"] = true, ["czr_0416"] = true,
-    ["tw_vic2012"] = true, ["12i21777"] = true, ["dandanman678"] = true,
-    ["psaabfmiuh"] = true, ["dt106101zz"] = true, ["Liu_Ruyancat"] = true,
+    ["Kadys5373"]      = true, 
+    ["Zadrian664"]     = true, 
+    ["Zn6xx"]          = true,
+    ["jay04_23"]       = true, 
+    ["iandsere"]       = true, 
+    ["czr_0416"]       = true,
+    ["tw_vic2012"]     = true, 
+    ["12i21777"]       = true, 
+    ["dandanman678"]   = true,
+    ["psaabfmiuh"]     = true, 
+    ["dt106101zz"]     = true, 
+    ["Liu_Ruyancat"]   = true,
     ["030501aaaaaaaaaa"] = true
 }
 
@@ -28,36 +35,23 @@ if not Whitelist[localPlayer.Name] then
 end
 
 -- =============================================================
--- ⚔️ 2. 自動功能區 (自動武裝色 & 自動拿武器)
+-- ⚔️ 2. 自動武裝色循環 (每秒檢查一次)
 -- =============================================================
--- [自動武裝色]
 task.spawn(function()
     while task.wait(1) do
         pcall(function()
             local character = localPlayer.Character
-            if character and not character:FindFirstChild("HasBuso") then
-                ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+            if character then
+                if not character:FindFirstChild("HasBuso") then
+                    ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+                end
             end
         end)
     end
 end)
 
--- [自動裝備武器函數]
-local function AutoEquipWeapon()
-    pcall(function()
-        if not localPlayer.Character:FindFirstChildOfClass("Tool") then
-            for _, tool in pairs(localPlayer.Backpack:GetChildren()) do
-                if tool:IsA("Tool") and (tool.ToolTip == "Sword" or tool.ToolTip == "Melee") then
-                    localPlayer.Character.Humanoid:EquipTool(tool)
-                    break
-                end
-            end
-        end
-    end)
-end
-
 -- =============================================================
--- ♻️ 3. 環境清理
+-- ♻️ 3. 環境清理 (確保不重疊)
 -- =============================================================
 local function NuclearClean()
     local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn"}
@@ -112,7 +106,7 @@ pcall(function()
 end)
 
 -- =============================================================
--- 📋 6. 智慧選人選單
+-- 📋 6. 智慧選人選單 (黏人功能)
 -- =============================================================
 function TogglePlayerMenu()
     if CoreGui:FindFirstChild("NekoStickyMenu") then
@@ -166,7 +160,7 @@ function TogglePlayerMenu()
 end
 
 -- =============================================================
--- 📢 7. 介面控制中心
+-- 📢 7. 介面控制中心 (狀態監控)
 -- =============================================================
 local TabInfo = myUI:Tab("公告 / 狀態")
 TabInfo:Section("📊 實時監控"):Button("⚠️ 檢查核心連結", function() end)
@@ -185,7 +179,7 @@ task.spawn(function()
 end)
 
 -- =============================================================
--- ⚔️ 8. 戰鬥系統 (強化攻擊邏輯)
+-- ⚔️ 8. 戰鬥系統 (對接核心)
 -- =============================================================
 local TabFight = myUI:Tab("戰鬥系統")
 local F_Core = TabFight:Section("核心收割中心")
@@ -194,15 +188,12 @@ F_Core:Button("📋 打開選人名單", function() TogglePlayerMenu() end)
 F_Core:Toggle("黏人總開關 (Sticky)", function(s) _G.Settings.StickyEnabled = s end)
 F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s) 
     _G.NekoAttack = s
-    if s then
-        if _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
-        AutoEquipWeapon() -- 每次開啟攻擊都自動檢查有無拿刀
-    end
+    if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
 end)
 F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) _G.Settings.PullEnemies = s end)
 F_Core:Toggle("自動覺醒 V4", function(s) _G.AutoV4 = s end)
-F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true; AutoEquipWeapon() end)
-F_Core:Button("🔥 模式：全殺模式 (All)", function() _G.Settings.Mode = "All"; _G.NekoAttack = true; AutoEquipWeapon() end)
+F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true end)
+F_Core:Button("🔥 模式：全殺模式 (All)", function() _G.Settings.Mode = "All"; _G.NekoAttack = true end)
 F_Core:Button("🛑 停止所有戰鬥行為", function() 
     _G.Settings.Mode = "None"; _G.NekoAttack = false; _G.Settings.StickyEnabled = false 
 end)
@@ -226,7 +217,7 @@ TabEnv:Section("效能"):Button("FPS 極致優化 (安卓專用)", function()
 end)
 
 -- =============================================================
--- ⛵ 10. 移動傳送
+-- ⛵ 10. 移動傳送 (跨海連結更新)
 -- =============================================================
 local TabMove = myUI:Tab("移動傳送")
 local M1 = TabMove:Section("角色移動")
@@ -243,7 +234,7 @@ TP:Button("前往：二海 (Dressrosa)", function() Sea("TravelDressrosa") end)
 TP:Button("前往：三海 (Zou)", function() Sea("TravelZou") end)
 
 -- =============================================================
--- 🐾 11. 最小化按鈕
+-- 🐾 11. 最小化按鈕 (對應安卓觸控加大)
 -- =============================================================
 local MiniBtn = Instance.new("TextButton", screenGui)
 MiniBtn.Name = "NekoMainBtn"
@@ -262,4 +253,4 @@ Stroke.Thickness = 2
 myUI:AddDrag(MiniBtn)
 MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
 
-print("🐾 NEKO TERMINAL - 強化通用版啟動成功喵！")
+print("🐾 NEKO TERMINAL - 終極修正版啟動成功喵！")
