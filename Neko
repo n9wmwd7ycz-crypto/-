@@ -1,0 +1,250 @@
+-- [[ 🐾 NEKO TERMINAL - 2026 REDMI PAD EDITION 🐾 ]] --
+-- 最佳解析度建議：小米/紅米平板全系列
+
+local Players           = game:GetService("Players")
+local localPlayer       = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CoreGui           = game:GetService("CoreGui")
+
+if getgenv().NEKO_RUNNING then return end
+getgenv().NEKO_RUNNING = true
+
+-- =============================================================
+-- 🛡️ 1. 白名單驗證 (與主人 Gist 同步)
+-- =============================================================
+local Whitelist = {
+    ["Kadys5373"]      = true, ["Zadrian664"]     = true, ["Zn6xx"]          = true,
+    ["jay04_23"]       = true, ["iandsere"]       = true, ["czr_0416"]       = true,
+    ["tw_vic2012"]     = true, ["12i21777"]       = true, ["dandanman678"]   = true,
+    ["psaabfmiuh"]     = true, ["dt106101zz"]     = true, ["Liu_Ruyancat"]   = true,
+    ["030501aaaaaaaaaa"] = true
+}
+
+if not Whitelist[localPlayer.Name] then
+    pcall(function() 
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/c412e509894a076b93bc03e56da15879/raw/No"))() 
+    end)
+    return
+end
+
+-- =============================================================
+-- ♻️ 2. 環境清理 (確保大螢幕不重疊)
+-- =============================================================
+local function NuclearClean()
+    local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn"}
+    for _, n in ipairs(targets) do
+        local o = CoreGui:FindFirstChild(n)
+        if o then o:Destroy() end
+    end
+end
+NuclearClean()
+task.wait(0.2)
+
+-- =============================================================
+-- 📦 3. 全局設定 (確保對接 PVP 核心)
+-- =============================================================
+_G.Settings = {
+    ClickDelay    = 0.01,
+    Distance      = 5000,
+    PullEnemies   = false,
+    Mode          = "None", -- 初始為 None
+    FOV           = 85,      -- 安卓平板大螢幕建議 85
+    ZoomDist      = 128,
+    CatSpeedValue = 50,
+    SpeedEnabled  = false,
+    StickyEnabled = false,
+    StickyTarget  = nil,      
+    StickyOffset  = CFrame.new(3, 0, 7), 
+    SnapDistance  = 500,
+    LerpSpeed     = 0.35
+}
+
+_G.NekoRunning = true
+_G.NekoAttack  = false -- 預設關閉攻擊
+_G.AutoV4      = false
+_G.NekoESP     = false
+
+-- =============================================================
+-- 🚀 4. 資源載入 (PVP 核心與 UI 庫)
+-- =============================================================
+-- 先載入 UI 庫以顯示進度
+local success, UIContent = pcall(function() 
+    return game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/1b850860c7208d6316aadfd950ed6d17/raw/UI") 
+end)
+
+if not success then return print("小柒提示：UI 載入失敗喵...") end
+local NekoLib = loadstring(UIContent)()
+local myUI, screenGui = NekoLib.new("NEKO BF")
+
+-- 異步載入 PVP 核心
+task.spawn(function()
+    pcall(function() 
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/b8ea7ffa66a29c98e6291a2185c92561/raw/PVP"))() 
+    end)
+end)
+
+-- =============================================================
+-- 📋 5. 智慧選人選單 (黏人功能)
+-- =============================================================
+function TogglePlayerMenu()
+    if CoreGui:FindFirstChild("NekoStickyMenu") then
+        CoreGui.NekoStickyMenu:Destroy()
+        return
+    end
+
+    local SG = Instance.new("ScreenGui", CoreGui)
+    SG.Name = "NekoStickyMenu"
+    local Frame = Instance.new("Frame", SG)
+    Frame.Size = UDim2.new(0, 250, 0, 350) -- 平板版稍微加大
+    Frame.Position = UDim2.new(0.5, -125, 0.5, -175)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
+    
+    local Title = Instance.new("TextLabel", Frame)
+    Title.Size = UDim2.new(1, 0, 0, 50)
+    Title.Text = "選擇黏著目標 🐾"
+    Title.TextColor3 = Color3.fromRGB(255, 120, 180)
+    Title.TextSize = 18
+    Title.BackgroundTransparency = 1
+    
+    local List = Instance.new("ScrollingFrame", Frame)
+    List.Size = UDim2.new(1, -20, 1, -70)
+    List.Position = UDim2.new(0, 10, 0, 60)
+    List.BackgroundTransparency = 1
+    List.ScrollBarThickness = 4
+    local Layout = Instance.new("UIListLayout", List)
+    Layout.Padding = UDim.new(0, 8)
+    
+    local function Refresh()
+        for _, v in pairs(List:GetChildren()) do if v:IsA("TextButton") then v:Destroy() end end
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= localPlayer then
+                local b = Instance.new("TextButton", List)
+                b.Size = UDim2.new(1, 0, 0, 40)
+                b.Text = p.Name
+                b.BackgroundColor3 = (_G.Settings.StickyTarget == p) and Color3.fromRGB(255, 100, 150) or Color3.fromRGB(45, 45, 50)
+                b.TextColor3 = Color3.new(1,1,1)
+                Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+                b.MouseButton1Click:Connect(function()
+                    _G.Settings.StickyTarget = p
+                    _G.Settings.StickyEnabled = true
+                    Refresh()
+                end)
+            end
+        end
+    end
+    Refresh()
+    myUI:AddDrag(Frame)
+end
+
+-- =============================================================
+-- 📢 6. 介面控制中心 (完美聯動版)
+-- =============================================================
+local TabInfo = myUI:Tab("公告 / 狀態")
+TabInfo:Section("📊 實時監控"):Button("⚠️ 檢查核心連結", function() end)
+
+local BtnAtk = TabInfo:Section("📊 狀態"):Button("⚔️ 攻擊：OFF", function() end)
+local BtnMode = TabInfo:Section("📊 狀態"):Button("🧠 模式：None", function() end)
+
+task.spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            BtnAtk.Text = "⚔️ 攻擊：" .. (_G.NekoAttack and "🟢 運行中" or "🔴 已關閉")
+            local m = (_G.Settings.Mode == "Mob" and "自動打怪") or (_G.Settings.Mode == "All" and "全殺模式") or "休息中"
+            BtnMode.Text = "🧠 模式：" .. m
+        end)
+    end
+end)
+
+-- 戰鬥分頁：對接核心邏輯
+local TabFight = myUI:Tab("戰鬥系統")
+local F_Core = TabFight:Section("核心收割中心")
+
+F_Core:Button("📋 打開選人名單", function() TogglePlayerMenu() end)
+
+F_Core:Toggle("黏人總開關 (Sticky)", function(s) 
+    _G.Settings.StickyEnabled = s 
+end)
+
+F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s) 
+    _G.NekoAttack = s
+    if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
+end)
+
+F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) 
+    _G.Settings.PullEnemies = s 
+end)
+
+F_Core:Toggle("自動覺醒 V4", function(s) 
+    _G.AutoV4 = s 
+end)
+
+F_Core:Button("🧠 模式：自動打怪 (Mob)", function() 
+    _G.Settings.Mode = "Mob" 
+    _G.NekoAttack = true 
+end)
+
+F_Core:Button("🔥 模式：全殺模式 (All)", function() 
+    _G.Settings.Mode = "All" 
+    _G.NekoAttack = true 
+end)
+
+F_Core:Button("🛑 停止所有戰鬥行為", function() 
+    _G.Settings.Mode = "None"
+    _G.NekoAttack = false
+    _G.Settings.StickyEnabled = false
+end)
+
+-- 環境優化
+local TabEnv = myUI:Tab("環境優化")
+local V = TabEnv:Section("視覺增強")
+V:Toggle("開啟貓貓透視 (ESP)", function(s)
+    _G.NekoESP = s
+    if s and not _G.ESPLoaded then
+        _G.ESPLoaded = true
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/4bf7ea87feebc7f07848c1f2420ea7d4/raw/Esp"))()
+    end
+end)
+V:Textbox("視野 (FOV)", "85", function(v) _G.Settings.FOV = tonumber(v) or 85 end)
+
+TabEnv:Section("效能"):Button("FPS 極致優化 (安卓專用)", function()
+    if _G.OptimizeFPS then _G.OptimizeFPS() 
+    else loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/f27ffbea110787e2d1369cf0a8395f86/raw/FPS"))() end
+end)
+
+-- 移動傳送
+local TabMove = myUI:Tab("移動傳送")
+local M1 = TabMove:Section("角色移動")
+M1:Toggle("開啟移動加速", function(s) _G.Settings.SpeedEnabled = s end)
+M1:Textbox("速度數值", "50", function(v) _G.Settings.CatSpeedValue = tonumber(v) or 50 end)
+M1:Button("召喚貓貓飛行器", function()
+    loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/87e03632f43bb01d10b52e7ace96866a/raw/Fly"))()
+end)
+
+local TP = TabMove:Section("跨海傳送")
+local function Sea(c) pcall(function() ReplicatedStorage.Remotes.CommF_:InvokeServer(c) end) end
+TP:Button("前往：一海 (Main)", function() Sea("TravelMain") end)
+TP:Button("前往：二海 (Dressrosa)", function() Sea("TravelDressrosa") end)
+TP:Button("前往：三海 (Zou)", function() Sea("TravelZou") end)
+
+-- =============================================================
+-- 🐾 10. 最小化按鈕 (對應安卓觸控加大)
+-- =============================================================
+local MiniBtn = Instance.new("TextButton", screenGui)
+MiniBtn.Name = "NekoMainBtn"
+MiniBtn.Size = UDim2.new(0, 65, 0, 65) -- 適合平板點擊的大小
+MiniBtn.Position = UDim2.new(0, 20, 0.5, -32)
+MiniBtn.Text = "🐾"
+MiniBtn.TextSize = 30
+MiniBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+MiniBtn.TextColor3 = Color3.fromRGB(255, 120, 180)
+MiniBtn.ZIndex = 10
+Instance.new("UICorner", MiniBtn).CornerRadius = UDim.new(1, 0)
+local Stroke = Instance.new("UIStroke", MiniBtn)
+Stroke.Color = Color3.fromRGB(255, 120, 180)
+Stroke.Thickness = 2
+
+myUI:AddDrag(MiniBtn)
+MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
+
+print("🐾 NEKO TERMINAL - REDMI PAD EDITION 啟動成功喵！")
