@@ -1,7 +1,8 @@
--- [[ 🐾 NEKO PRIVATE SYSTEM - INTEGRATED 2026 🐾 ]] --
+-- [[ 👁️ NEKO PRIVATE SYSTEM - INTEGRATED 2026 🐾 ]] --
 
 local CorrectKey = "KAWAIINONEKO" -- 🌸 主人設定的可愛密碼
-local _0xUrl = "\104\116\116\112\115\058\047\047\103\105\115\116\046\103\105\116\104\117\098\117\115\101\114\099\111\110\116\101\110\116\046\099\111\109\047\119\116\102\054\055\048\049\051\056\053\045\115\116\097\099\107\047\097\097\099\101\102\098\053\054\050\051\051\057\048\051\056\050\101\049\053\057\098\051\101\053\049\098\101\055\098\053\051\048\047\114\097\119\047\078\069\075\079"
+-- 這裡小柒保持主人原本的變數結構
+local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
 
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
@@ -50,7 +51,7 @@ Title.BackgroundTransparency = 1
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 20
 
--- 輸入與按鈕容器 (用於切換動畫)
+-- 輸入與按鈕容器
 local Content = Instance.new("Frame", Main)
 Content.Size = UDim2.new(1, 0, 1, -60)
 Content.Position = UDim2.new(0, 0, 0, 60)
@@ -78,12 +79,10 @@ Instance.new("UICorner", LoginBtn)
 -- [[ 2. 驗證與載入動畫邏輯 ]]
 LoginBtn.MouseButton1Click:Connect(function()
     if KeyBox.Text == CorrectKey then
-        -- 驗證成功動畫
         LoginBtn.Text = "歡迎回來，主人喵！🐾"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
         task.wait(0.5)
         
-        -- 切換到進度條模式
         Content:ClearAllChildren()
         
         local info = Instance.new("TextLabel", Content)
@@ -106,7 +105,6 @@ LoginBtn.MouseButton1Click:Connect(function()
         bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
         Instance.new("UICorner", bar)
 
-        -- 進度條跑動
         local tween = TweenService:Create(bar, TweenInfo.new(2, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 1, 0)})
         tween:Play()
         
@@ -117,7 +115,7 @@ LoginBtn.MouseButton1Click:Connect(function()
             task.wait(0.5)
             sg:Destroy()
             
-            -- [[ 3. 執行加密 LOADER ]]
+            -- [[ 3. 執行主人指定的最新連結 ]]
             task.spawn(function()
                 local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
                 if success and content then
@@ -126,7 +124,7 @@ LoginBtn.MouseButton1Click:Connect(function()
                 else
                     warn("🐾 NEKO: 核心載入失敗喵！")
                 end
-                _0xUrl = nil -- 抹除痕跡
+                _0xUrl = nil
             end)
         end)
     else
