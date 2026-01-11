@@ -72,7 +72,8 @@ _G.Settings = {
     StickyTarget  = nil,      
     StickyOffset  = CFrame.new(3, 0, 7), 
     SnapDistance  = 500,
-    LerpSpeed     = 0.35
+    LerpSpeed     = 0.35,
+    AutoBuyFruit  = false
 }
 
 _G.NekoRunning = true
@@ -180,7 +181,12 @@ local TabFight = myUI:Tab("戰鬥系統")
 local F_Core = TabFight:Section("核心收割中心")
 
 F_Core:Button("📋 打開選人名單", function() TogglePlayerMenu() end)
-F_Core:Toggle("黏人總開關 (Sticky)", function(s) _G.Settings.StickyEnabled = s end)
+-- [[ 🐾 修正：移除 Toggle，換成單純的停止按鈕 ]] --
+F_Core:Button("🛑 停止黏著目標", function() 
+    _G.Settings.StickyEnabled = false 
+    _G.Settings.StickyTarget = nil
+end)
+
 F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s) 
     _G.NekoAttack = s
     if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
@@ -229,7 +235,39 @@ TP:Button("前往：二海 (Dressrosa)", function() Sea("TravelDressrosa") end)
 TP:Button("前往：三海 (Zou)", function() Sea("TravelZou") end)
 
 -- =============================================================
--- 🐾 10. 最小化按鈕 (對應安卓觸控加大)
+-- 🎰 10. 果實系統 (新增分頁 🐾)
+-- =============================================================
+local TabFruit = myUI:Tab("果實系統")
+local FruitSec = TabFruit:Section("自動與抽獎")
+
+task.spawn(function()
+    while task.wait(5) do
+        if _G.Settings.AutoBuyFruit then
+            pcall(function()
+                ReplicatedStorage.Remotes.CommF_:InvokeServer("Cousin", "Buy")
+            end)
+        end
+    end
+end)
+
+FruitSec:Toggle("自動找表哥抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
+FruitSec:Button("🎰 立即手動抽一次", function()
+    pcall(function()
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("Cousin", "Buy")
+    end)
+end)
+FruitSec:Button("📦 快速存儲所有果實", function()
+    pcall(function()
+        for _, v in pairs(localPlayer.Backpack:GetChildren()) do
+            if v:IsA("Tool") and string.find(v.Name, "Fruit") then
+                ReplicatedStorage.Remotes.CommF_:InvokeServer("StoreFruit", v.Name, v)
+            end
+        end
+    end)
+end)
+
+-- =============================================================
+-- 🐾 11. 最小化按鈕 (對應安卓觸控加大)
 -- =============================================================
 local MiniBtn = Instance.new("TextButton", screenGui)
 MiniBtn.Name = "NekoMainBtn"
@@ -248,4 +286,4 @@ Stroke.Thickness = 2
 myUI:AddDrag(MiniBtn)
 MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
 
-print("🐾 NEKO TERMINAL - 終極穩定版啟動成功喵！")
+print("🐾 NEKO TERMINAL - 穩定版 (修正黏人按鈕) 已就緒！")
