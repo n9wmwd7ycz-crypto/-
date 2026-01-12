@@ -1,6 +1,7 @@
 local Players           = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CoreGui           = game:GetService("CoreGui")
+local RunService        = game:GetService("RunService")
 local localPlayer       = Players.LocalPlayer
 
 if getgenv().NEKO_RUNNING then return end
@@ -105,28 +106,30 @@ task.spawn(function()
     end
 end)
 
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
+    end)
+end)
+
 function TogglePlayerMenu()
     if CoreGui:FindFirstChild("NekoStickyMenu") then
         CoreGui.NekoStickyMenu:Destroy()
         return
     end
-
     local SG = Instance.new("ScreenGui", CoreGui)
     SG.Name = "NekoStickyMenu"
-
     local Frame = Instance.new("Frame", SG)
     Frame.Size = UDim2.new(0, 250, 0, 350)
     Frame.Position = UDim2.new(0.5, -125, 0.5, -175)
     Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
     Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
-
     local List = Instance.new("ScrollingFrame", Frame)
     List.Size = UDim2.new(1, -20, 1, -70)
     List.Position = UDim2.new(0, 10, 0, 60)
     List.BackgroundTransparency = 1
     List.ScrollBarThickness = 4
     Instance.new("UIListLayout", List).Padding = UDim.new(0, 8)
-
     local function Refresh()
         for _, v in pairs(List:GetChildren()) do
             if v:IsA("TextButton") then v:Destroy() end
@@ -147,7 +150,6 @@ function TogglePlayerMenu()
             end
         end
     end
-
     Refresh()
     myUI:AddDrag(Frame)
 end
@@ -169,19 +171,15 @@ end)
 
 local TabFight = myUI:Tab("戰鬥系統")
 local F_Core   = TabFight:Section("核心收割中心")
-
 F_Core:Button("📋 打開選人名單", TogglePlayerMenu)
-
 F_Core:Button("🛑 停止黏著目標", function()
     _G.Settings.StickyEnabled = false
     _G.Settings.StickyTarget  = nil
 end)
-
 F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s)
     _G.NekoAttack = s
     if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
 end)
-
 F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) _G.Settings.PullEnemies = s end)
 F_Core:Toggle("自動覺醒 V4", function(s) _G.AutoV4 = s end)
 F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true end)
@@ -194,7 +192,6 @@ end)
 
 local TabEnv = myUI:Tab("環境優化")
 local VisualSec = TabEnv:Section("視覺增強")
-
 VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
     _G.NekoESP = s
     if s and not _G.ESPLoaded then
@@ -202,33 +199,24 @@ VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Esp"))()
     end
 end)
-
 VisualSec:Textbox("視野範圍 (Max 1000)", "85", function(v)
     local num = tonumber(v)
-    if num then
-        _G.Settings.FOV = math.clamp(num, 1, 1000)
-        pcall(function() workspace.CurrentCamera.FieldOfView = _G.Settings.FOV end)
-    end
+    if num then _G.Settings.FOV = math.clamp(num, 1, 1000) end
 end)
-
 TabEnv:Section("效能"):Button("FPS 極致優化", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/FPS"))()
 end)
 
 local TabMove = myUI:Tab("移動傳送")
 local M1 = TabMove:Section("角色移動")
-
 M1:Toggle("開啟移動加速", function(s) _G.Settings.SpeedEnabled = s end)
-
 M1:Textbox("加速數值", "50", function(v)
     local num = tonumber(v)
     if num then _G.Settings.CatSpeedValue = num end
 end)
-
 M1:Button("召喚貓貓飛行器", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Fly"))()
 end)
-
 local TP = TabMove:Section("跨海傳送")
 TP:Button("前往：一海 (Main)",       function() Sea("TravelMain") end)
 TP:Button("前往：二海 (Dressrosa)",  function() Sea("TravelDressrosa") end)
@@ -236,7 +224,6 @@ TP:Button("前往：三海 (Zou)",        function() Sea("TravelZou") end)
 
 local TabFruit = myUI:Tab("果實系統")
 local FruitSec = TabFruit:Section("自動與抽獎")
-
 FruitSec:Toggle("自動抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
 FruitSec:Button("🎰 立即手動抽一次", function() pcall(function() Remote:InvokeServer("Cousin", "Buy") end) end)
 FruitSec:Button("📦 快速存儲所有果實", function()
@@ -259,10 +246,8 @@ MiniBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 MiniBtn.TextColor3 = Color3.fromRGB(255, 120, 180)
 MiniBtn.ZIndex = 10
 Instance.new("UICorner", MiniBtn).CornerRadius = UDim.new(1, 0)
-
 local Stroke = Instance.new("UIStroke", MiniBtn)
 Stroke.Color = Color3.fromRGB(255, 120, 180)
 Stroke.Thickness = 2
-
 myUI:AddDrag(MiniBtn)
 MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
