@@ -2,6 +2,7 @@ local Players           = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CoreGui           = game:GetService("CoreGui")
 local RunService        = game:GetService("RunService")
+local UserInputService  = game:GetService("UserInputService")
 local localPlayer       = Players.LocalPlayer
 
 if getgenv().NEKO_RUNNING then return end
@@ -56,10 +57,11 @@ _G.Settings = {
     Distance      = 5000,
     PullEnemies   = false,
     Mode          = "None",
-    FOV           = 85,
-    ZoomDist      = 128,
+    FOV           = 80,
+    MaxZoom       = 128,
     CatSpeedValue = 50,
     SpeedEnabled  = false,
+    InfJump       = false,
     StickyEnabled = false,
     StickyTarget  = nil,
     StickyOffset  = CFrame.new(3, 0, 7),
@@ -124,8 +126,21 @@ end)
 
 RunService.RenderStepped:Connect(function()
     pcall(function()
+        localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
         workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
     end)
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if _G.Settings.InfJump then
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+            end
+        end)
+    end
 end)
 
 function TogglePlayerMenu()
@@ -215,9 +230,9 @@ VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Esp"))()
     end
 end)
-VisualSec:Textbox("視野範圍 (Max 1000)", "85", function(v)
+VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
     local num = tonumber(v)
-    if num then _G.Settings.FOV = math.clamp(num, 1, 1000) end
+    if num then _G.Settings.MaxZoom = math.clamp(num, 1, 1000) end
 end)
 TabEnv:Section("效能"):Button("FPS 極致優化", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/FPS"))()
@@ -230,9 +245,11 @@ M1:Textbox("加速數值", "50", function(v)
     local num = tonumber(v)
     if num then _G.Settings.CatSpeedValue = num end
 end)
+M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
 M1:Button("召喚貓貓飛行器", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Fly"))()
 end)
+
 local TP = TabMove:Section("跨海傳送")
 TP:Button("前往：一海 (Main)",       function() Sea("TravelMain") end)
 TP:Button("前往：二海 (Dressrosa)",  function() Sea("TravelDressrosa") end)
