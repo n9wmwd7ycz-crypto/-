@@ -106,6 +106,22 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(2) do
+        if _G.AutoV4 then
+            pcall(function()
+                local character = localPlayer.Character
+                local awakening = localPlayer:FindFirstChild("Backpack"):FindFirstChild("Awakening") 
+                    or (character and character:FindFirstChild("Awakening"))
+                if awakening then
+                    local remote = awakening:FindFirstChild("RemoteFunction")
+                    if remote then remote:InvokeServer(true) end
+                end
+            end)
+        end
+    end
+end)
+
 RunService.RenderStepped:Connect(function()
     pcall(function()
         workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
