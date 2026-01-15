@@ -4,46 +4,20 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local lp = Players.LocalPlayer
 
--- [[ 📢 邏輯 1：任何人啟動腳本即發送通知 ]]
-task.spawn(function()
-    pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/1b907ea5714181ea580e68fad81a5c3c/raw/9503c0d21512a003963bb9de809dd3a18485da92/Yes"))()
-    end)
-    -- P 計劃持續執行
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/P"))()
-    end)
-end)
-
-local CorrectKey = "KAWAIINONEKO" 
 local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
 local _0xPCUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Nekoo"
 
--- [[ 內置白名單列表 ]]
 local Whitelist = {
-    ["Kadys5373"]         = true,
-    ["Zadrian664"]        = true,
-    ["Zn6xx"]             = true,
-    ["jay04_23"]          = true,
-    ["iandsere"]          = true,
-    ["czr_0416"]          = true,
-    ["tw_vic2012"]        = true,
-    ["12i21777"]          = true,
-    ["dandanman678"]      = true,
-    ["psaabfmiuh"]        = true,
-    ["dt106101zz"]        = true,
-    ["Liu_Ruyancat"]      = true,
-    ["030501aaaaaaaaaa"]  = true,
-    ["robloxasdft114"]    = true,
-    ["iqiqiqiqiqiq188"]   = true,
-    ["YuXin_107"]         = true,
-    ["aaron08229453"]     = true
+    ["Kadys5373"] = true, ["Zadrian664"] = true, ["Zn6xx"] = true, ["jay04_23"] = true,
+    ["iandsere"] = true, ["czr_0416"] = true, ["tw_vic2012"] = true, ["12i21777"] = true,
+    ["dandanman678"] = true, ["psaabfmiuh"] = true, ["dt106101zz"] = true, ["Liu_Ruyancat"] = true,
+    ["030501aaaaaaaaaa"] = true, ["robloxasdft114"] = true, ["iqiqiqiqiqiq188"] = true,
+    ["YuXin_107"] = true, ["aaron08229453"] = true
 }
 
--- [[ 核心偵測啟動函數 ]]
 local function LaunchNeko()
     task.spawn(function()
-        local isPC = UserInputService.KeyboardEnabled and not UserInputService.TouchEnabled
+        local isPC = not UserInputService.TouchEnabled or UserInputService.KeyboardEnabled
         local targetUrl = isPC and _0xPCUrl or _0xUrl
         local success, content = pcall(function() return game:HttpGet(targetUrl) end)
         if success and content then
@@ -53,33 +27,25 @@ local function LaunchNeko()
     end)
 end
 
--- [[ 🛡️ 邏輯 2：白名單與非白名單的區別對待 ]]
-if Whitelist[lp.Name] then
-    LaunchNeko()
-    return
-else
-    -- 非白名單先執行 No 警告腳本
+if not Whitelist[lp.Name] then
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/No"))()
     end)
+    return
 end
 
--- [[ 🔒 邏輯 3：非白名單用戶的密碼驗證介面 ]]
 local sg = Instance.new("ScreenGui")
-sg.Name = "Neko_Ultimate_Access"
+sg.Name = "Neko_Owner_Loading"
 sg.ResetOnSpawn = false
 pcall(function() sg.Parent = CoreGui end)
 if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
 
 local Main = Instance.new("Frame", sg)
-Main.Size = UDim2.new(0, 360, 0, 240)
-Main.Position = UDim2.new(0.5, -180, 0.5, -120)
+Main.Size = UDim2.new(0, 360, 0, 160)
+Main.Position = UDim2.new(0.5, -180, 0.5, -80)
 Main.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
 Main.BackgroundTransparency = 0.1
 Main.BorderSizePixel = 0
-Main.ClipsDescendants = true
-Main.Draggable = true
-Main.Active = true
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
 
 local mStroke = Instance.new("UIStroke", Main)
@@ -106,73 +72,43 @@ Title.BackgroundTransparency = 1
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 20
 
-local Content = Instance.new("Frame", Main)
-Content.Size = UDim2.new(1, 0, 1, -60)
-Content.Position = UDim2.new(0, 0, 0, 60)
-Content.BackgroundTransparency = 1
+local infoLabel = Instance.new("TextLabel", Main)
+infoLabel.Size = UDim2.new(1, 0, 0, 40)
+infoLabel.Position = UDim2.new(0, 0, 0.4, 0)
+infoLabel.Text = "歡迎回來，主人喵..."
+infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+infoLabel.BackgroundTransparency = 1
+infoLabel.Font = Enum.Font.GothamBold
+infoLabel.TextSize = 14
 
-local KeyBox = Instance.new("TextBox", Content)
-KeyBox.Size = UDim2.new(0, 280, 0, 45)
-KeyBox.Position = UDim2.new(0.5, -140, 0.15, 0)
-KeyBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-KeyBox.PlaceholderText = "輸入可愛密碼..."
-KeyBox.Text = ""
-KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyBox.Font = Enum.Font.Gotham
-Instance.new("UICorner", KeyBox)
+local barBg = Instance.new("Frame", Main)
+barBg.Size = UDim2.new(0, 280, 0, 6)
+barBg.Position = UDim2.new(0.5, -140, 0.7, 0)
+barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Instance.new("UICorner", barBg)
 
-local LoginBtn = Instance.new("TextButton", Content)
-LoginBtn.Size = UDim2.new(0, 280, 0, 45)
-LoginBtn.Position = UDim2.new(0.5, -140, 0.55, 0)
-LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 180)
-LoginBtn.Text = "驗證身分"
-LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-LoginBtn.Font = Enum.Font.GothamBold
-Instance.new("UICorner", LoginBtn)
+local bar = Instance.new("Frame", barBg)
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Instance.new("UICorner", bar)
 
-LoginBtn.MouseButton1Click:Connect(function()
-    if KeyBox.Text == CorrectKey then
-        LoginBtn.Text = "歡迎回來，主人喵！🐾"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
-        task.wait(0.5)
-        Content:ClearAllChildren()
-        
-        local infoLabel = Instance.new("TextLabel", Content)
-        infoLabel.Size = UDim2.new(1, 0, 0, 40)
-        infoLabel.Position = UDim2.new(0, 0, 0.1, 0)
-        infoLabel.Text = "系統初始化中..."
-        infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        infoLabel.BackgroundTransparency = 1
-        infoLabel.Font = Enum.Font.GothamBold
-        infoLabel.TextSize = 14
+task.spawn(function()
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/1b907ea5714181ea580e68fad81a5c3c/raw/9503c0d21512a003963bb9de809dd3a18485da92/Yes"))()
+    end)
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/P"))()
+    end)
+end)
 
-        local barBg = Instance.new("Frame", Content)
-        barBg.Size = UDim2.new(0, 280, 0, 6)
-        barBg.Position = UDim2.new(0.5, -140, 0.5, 0)
-        barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        Instance.new("UICorner", barBg)
-        
-        local bar = Instance.new("Frame", barBg)
-        bar.Size = UDim2.new(0, 0, 1, 0)
-        bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-        Instance.new("UICorner", bar)
+local barTween = TweenService:Create(bar, TweenInfo.new(2.5, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 1, 0)})
+barTween:Play()
 
-        local tween = TweenService:Create(bar, TweenInfo.new(2, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 1, 0)})
-        tween:Play()
-        
-        tween.Completed:Connect(function()
-            infoLabel.Text = "核心載入成功！"
-            task.wait(0.5)
-            TweenService:Create(Main, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
-            task.wait(0.5)
-            sg:Destroy()
-            LaunchNeko()
-        end)
-    else
-        LoginBtn.Text = "密碼錯誤喵！(QAQ)"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-        task.wait(1.5)
-        LoginBtn.Text = "驗證身分"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 180)
-    end
+barTween.Completed:Connect(function()
+    infoLabel.Text = "核心載入完成！🐾"
+    task.wait(0.5)
+    TweenService:Create(Main, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
+    task.wait(0.5)
+    sg:Destroy()
+    LaunchNeko()
 end)
