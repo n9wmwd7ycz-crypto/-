@@ -124,12 +124,14 @@ task.spawn(function()
     end
 end)
 
-RunService.RenderStepped:Connect(function()
+local function UpdateCamera()
     pcall(function()
         localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
         workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
     end)
-end)
+end
+
+UpdateCamera()
 
 UserInputService.JumpRequest:Connect(function()
     if _G.Settings.InfJump then
@@ -227,15 +229,18 @@ VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
     _G.NekoESP = s
     if s and not _G.ESPLoaded then
         _G.ESPLoaded = true
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Esp"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Esp"))()
     end
 end)
 VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
     local num = tonumber(v)
-    if num then _G.Settings.MaxZoom = math.clamp(num, 1, 1000) end
+    if num then 
+        _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
+        UpdateCamera()
+    end
 end)
 TabEnv:Section("效能"):Button("FPS 極致優化", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/FPS"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/FPS"))()
 end)
 
 local TabMove = myUI:Tab("移動傳送")
@@ -247,7 +252,7 @@ M1:Textbox("加速數值", "50", function(v)
 end)
 M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
 M1:Button("召喚貓貓飛行器", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Fly"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Fly"))()
 end)
 
 local TP = TabMove:Section("跨海傳送")
