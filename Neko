@@ -31,7 +31,8 @@ local Whitelist = {
     ["030501aaaaaaaaaa"]  = true,
     ["robloxasdft114"]    = true,
     ["iqiqiqiqiqiq188"]   = true,
-    ["YuXin_107"]         = true
+    ["YuXin_107"]         = true,
+    ["aaron08229453"]   = true
 }
 
 if not Whitelist[localPlayer.Name] then
