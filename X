@@ -3,43 +3,40 @@ local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local lp = Players.LocalPlayer
 
-task.spawn(function()
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/P"))()
-    end)
-end)
-
 local CorrectKey = "KAWAIINONEKO" 
-local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
 
-local function LaunchNeko()
-    task.spawn(function()
-        local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
-        if success and content then
-            local loader = loadstring(content)
-            if loader then loader() end
-        end
+local function SendNotification(title, text)
+    local sg_notify = Instance.new("ScreenGui", CoreGui)
+    local frame = Instance.new("Frame", sg_notify)
+    frame.Size = UDim2.new(0, 220, 0, 60)
+    frame.Position = UDim2.new(1, 0, 0.8, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Instance.new("UICorner", frame)
+    
+    local l1 = Instance.new("TextLabel", frame)
+    l1.Size = UDim2.new(1, 0, 0.5, 0)
+    l1.Text = title
+    l1.TextColor3 = Color3.fromRGB(255, 120, 180)
+    l1.BackgroundTransparency = 1
+    l1.Font = Enum.Font.GothamBold
+    
+    local l2 = Instance.new("TextLabel", frame)
+    l2.Size = UDim2.new(1, 0, 0.5, 0)
+    l2.Position = UDim2.new(0, 0, 0.5, 0)
+    l2.Text = text
+    l2.TextColor3 = Color3.fromRGB(255, 255, 255)
+    l2.BackgroundTransparency = 1
+    
+    TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.BackOut), {Position = UDim2.new(1, -240, 0.8, 0)}):Play()
+    task.delay(3, function()
+        TweenService:Create(frame, TweenInfo.new(0.5), {Position = UDim2.new(1, 0, 0.8, 0)}):Play()
+        task.wait(0.5)
+        sg_notify:Destroy()
     end)
-end
-
-local function CheckWhitelist()
-    local s, result = pcall(function()
-        return game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/W")
-    end)
-    if s and result:find(lp.Name) then
-        return true
-    end
-    return false
-end
-
-if CheckWhitelist() then
-    LaunchNeko()
-    return
 end
 
 local sg = Instance.new("ScreenGui")
-sg.Name = "Neko_Ultimate_Access"
-sg.ResetOnSpawn = false
+sg.Name = "Neko_Simple_Auth"
 pcall(function() sg.Parent = CoreGui end)
 if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
 
@@ -65,9 +62,10 @@ mGradient.Color = ColorSequence.new{
 }
 
 task.spawn(function()
-    local info = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.In, -1)
-    local tween = TweenService:Create(mGradient, info, {Rotation = 360})
-    tween:Play()
+    while Main and Main.Parent do
+        mGradient.Rotation = mGradient.Rotation + 1.5
+        task.wait(0.01)
+    end
 end)
 
 local Title = Instance.new("TextLabel", Main)
@@ -87,7 +85,7 @@ local KeyBox = Instance.new("TextBox", Content)
 KeyBox.Size = UDim2.new(0, 280, 0, 45)
 KeyBox.Position = UDim2.new(0.5, -140, 0.15, 0)
 KeyBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-KeyBox.PlaceholderText = "輸入可愛密碼..."
+KeyBox.PlaceholderText = "輸入密碼..."
 KeyBox.Text = ""
 KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyBox.Font = Enum.Font.Gotham
@@ -104,46 +102,22 @@ Instance.new("UICorner", LoginBtn)
 
 LoginBtn.MouseButton1Click:Connect(function()
     if KeyBox.Text == CorrectKey then
-        LoginBtn.Text = "歡迎回來，主人喵！🐾"
+        LoginBtn.Text = "驗證成功，喵！🐾"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
         task.wait(0.5)
-        Content:ClearAllChildren()
         
-        local infoLabel = Instance.new("TextLabel", Content)
-        infoLabel.Size = UDim2.new(1, 0, 0, 40)
-        infoLabel.Position = UDim2.new(0, 0, 0.1, 0)
-        infoLabel.Text = "系統初始化中..."
-        infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        infoLabel.BackgroundTransparency = 1
-        infoLabel.Font = Enum.Font.GothamBold
-        infoLabel.TextSize = 14
-
-        local barBg = Instance.new("Frame", Content)
-        barBg.Size = UDim2.new(0, 280, 0, 6)
-        barBg.Position = UDim2.new(0.5, -140, 0.5, 0)
-        barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        Instance.new("UICorner", barBg)
+        SendNotification("NEKO SYSTEM", "主人，歡迎回來喵！")
         
-        local bar = Instance.new("Frame", barBg)
-        bar.Size = UDim2.new(0, 0, 1, 0)
-        bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-        Instance.new("UICorner", bar)
-
-        local tween = TweenService:Create(bar, TweenInfo.new(2, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 1, 0)})
-        tween:Play()
+        TweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
+        task.wait(0.5)
+        sg:Destroy()
         
-        tween.Completed:Connect(function()
-            infoLabel.Text = "核心載入成功！"
-            task.wait(0.5)
-            TweenService:Create(Main, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
-            task.wait(0.5)
-            sg:Destroy()
-            LaunchNeko()
-        end)
+        -- [[ 在這裡直接貼上妳的主核心代碼，或者載入連結 ]] --
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"))()
     else
-        LoginBtn.Text = "密碼錯誤喵！(QAQ)"
+        LoginBtn.Text = "密碼錯誤！"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-        task.wait(1.5)
+        task.wait(1)
         LoginBtn.Text = "驗證身分"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(255, 120, 180)
     end
