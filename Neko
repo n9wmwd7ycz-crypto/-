@@ -5,6 +5,7 @@ local RunService        = game:GetService("RunService")
 local UserInputService  = game:GetService("UserInputService")
 local localPlayer       = Players.LocalPlayer
 
+-- [[ 影的運行鎖定 ]]
 if getgenv().NEKO_RUNNING then return end
 getgenv().NEKO_RUNNING = true
 
@@ -15,44 +16,19 @@ local function Sea(cmd)
     end)
 end
 
-local Whitelist = {
-    ["Kadys5373"]         = true,
-    ["Zadrian664"]        = true,
-    ["Zn6xx"]             = true,
-    ["jay04_23"]          = true,
-    ["iandsere"]          = true,
-    ["czr_0416"]          = true,
-    ["tw_vic2012"]        = true,
-    ["12i21777"]          = true,
-    ["dandanman678"]      = true,
-    ["psaabfmiuh"]        = true,
-    ["dt106101zz"]        = true,
-    ["Liu_Ruyancat"]      = true,
-    ["030501aaaaaaaaaa"]  = true,
-    ["robloxasdft114"]    = true,
-    ["iqiqiqiqiqiq188"]   = true,
-    ["YuXin_107"]         = true,
-    ["aaron08229453"]   = true
-}
-
-if not Whitelist[localPlayer.Name] then
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/No"))()
-    end)
-    return
-end
-
+-- [[ 清理舊 UI ]]
 local function NuclearClean()
     local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn"}
     for _, name in ipairs(targets) do
-        local obj = CoreGui:FindFirstChild(name)
-        if obj then obj:Destroy() end
+        local obj = CoreGui:FindFirstChild(name) or localPlayer:FindFirstChild("PlayerGui"):FindFirstChild(name)
+        if obj then pcall(function() obj:Destroy() end) end
     end
 end
 
 NuclearClean()
-task.wait(0.2)
+task.wait(0.3)
 
+-- [[ 全域設定 ]]
 _G.Settings = {
     ClickDelay    = 0.01,
     Distance      = 5000,
@@ -76,6 +52,7 @@ _G.NekoAttack  = false
 _G.AutoV4      = false
 _G.NekoESP     = false
 
+-- [[ 載入 UI 庫 ]]
 local success, UIContent = pcall(function()
     return game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Ui")
 end)
@@ -85,6 +62,103 @@ if not success then return end
 local NekoLib = loadstring(UIContent)()
 local myUI, screenGui = NekoLib.new("NEKO BF")
 
+-- [[ 容器設置 ]]
+pcall(function() screenGui.Parent = CoreGui end)
+if screenGui.Parent ~= CoreGui then screenGui.Parent = localPlayer:WaitForChild("PlayerGui") end
+
+-- [[ 🚀 功能渲染 (增加延遲確保按鈕出現) ]]
+task.spawn(function()
+    task.wait(0.2) -- 給 UI 殼一點緩衝時間喵
+
+    local TabInfo = myUI:Tab("公告 / 狀態")
+    local MonSec  = TabInfo:Section("貓奴們有事DC找我")
+    local BtnAtk  = MonSec:Button("⚔️ 攻擊：OFF", function() end)
+    local BtnMode = MonSec:Button("🧠 模式：None", function() end)
+
+    task.spawn(function()
+        while task.wait(0.5) do
+            pcall(function()
+                BtnAtk.Text = "⚔️ 攻擊：" .. (_G.NekoAttack and "🟢 運行中" or "🔴 已關閉")
+                local m = (_G.Settings.Mode == "Mob" and "自動打怪") or (_G.Settings.Mode == "All" and "全殺模式") or "休息中"
+                BtnMode.Text = "🧠 模式：" .. m
+            end)
+        end
+    end)
+
+    local TabFight = myUI:Tab("戰鬥系統")
+    local F_Core   = TabFight:Section("核心收割中心")
+    F_Core:Button("📋 打開選人名單", TogglePlayerMenu)
+    F_Core:Button("🛑 停止黏著目標", function()
+        _G.Settings.StickyEnabled = false
+        _G.Settings.StickyTarget  = nil
+    end)
+    F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s)
+        _G.NekoAttack = s
+        if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
+    end)
+    F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) _G.Settings.PullEnemies = s end)
+    F_Core:Toggle("自動覺醒 V4", function(s) _G.AutoV4 = s end)
+    F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true end)
+    F_Core:Button("🔥 模式：全殺模式 (All)", function() _G.Settings.Mode = "All"; _G.NekoAttack = true end)
+    F_Core:Button("🛑 停止所有戰鬥行為", function()
+        _G.Settings.Mode = "None"
+        _G.NekoAttack = false
+        _G.Settings.StickyEnabled = false
+    end)
+
+    local TabEnv = myUI:Tab("環境優化")
+    local VisualSec = TabEnv:Section("視覺增強")
+    VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
+        _G.NekoESP = s
+        if s and not _G.ESPLoaded then
+            _G.ESPLoaded = true
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Esp"))()
+        end
+    end)
+    VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
+        local num = tonumber(v)
+        if num then 
+            _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
+            pcall(function() localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom end)
+        end
+    end)
+    TabEnv:Section("效能"):Button("FPS 極致優化", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/FPS"))()
+    end)
+
+    local TabMove = myUI:Tab("移動傳送")
+    local M1 = TabMove:Section("角色移動")
+    M1:Toggle("開啟移動加速", function(s) _G.Settings.SpeedEnabled = s end)
+    M1:Textbox("加速數值", "50", function(v)
+        local num = tonumber(v)
+        if num then _G.Settings.CatSpeedValue = num end
+    end)
+    M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
+    M1:Button("召喚貓貓飛行器", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Fly"))()
+    end)
+
+    local TP = TabMove:Section("跨海傳送")
+    TP:Button("前往：一海 (Main)",       function() Sea("TravelMain") end)
+    TP:Button("前往：二海 (Dressrosa)",  function() Sea("TravelDressrosa") end)
+    TP:Button("前往：三海 (Zou)",        function() Sea("TravelZou") end)
+
+    local TabFruit = myUI:Tab("果實系統")
+    local FruitSec = TabFruit:Section("自動與抽獎")
+    FruitSec:Toggle("自動抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
+    FruitSec:Button("🎰 立即手動抽一次", function() pcall(function() Remote:InvokeServer("Cousin", "Buy") end) end)
+    FruitSec:Button("📦 快速存儲所有果實", function()
+        pcall(function()
+            for _, v in pairs(localPlayer.Backpack:GetChildren()) do
+                if v:IsA("Tool") and string.find(v.Name, "Fruit") then
+                    Remote:InvokeServer("StoreFruit", v.Name, v)
+                end
+            end
+        end)
+    end)
+end)
+
+-- [[ 後台功能循環 ]]
 task.spawn(function()
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/PvP"))()
@@ -98,14 +172,6 @@ task.spawn(function()
                 Remote:InvokeServer("Buso")
             end
         end)
-    end
-end)
-
-task.spawn(function()
-    while task.wait(5) do
-        if _G.Settings.AutoBuyFruit then
-            pcall(function() Remote:InvokeServer("Cousin", "Buy") end)
-        end
     end
 end)
 
@@ -125,34 +191,28 @@ task.spawn(function()
     end
 end)
 
-local function UpdateCamera()
-    pcall(function()
-        localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
-        workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
-    end)
-end
-
-UpdateCamera()
-
 UserInputService.JumpRequest:Connect(function()
     if _G.Settings.InfJump then
         pcall(function()
             local char = localPlayer.Character
-            if char then
-                local hum = char:FindFirstChildOfClass("Humanoid")
-                if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
             end
         end)
     end
 end)
 
 function TogglePlayerMenu()
-    if CoreGui:FindFirstChild("NekoStickyMenu") then
-        CoreGui.NekoStickyMenu:Destroy()
+    if CoreGui:FindFirstChild("NekoStickyMenu") or localPlayer.PlayerGui:FindFirstChild("NekoStickyMenu") then
+        local old = CoreGui:FindFirstChild("NekoStickyMenu") or localPlayer.PlayerGui:FindFirstChild("NekoStickyMenu")
+        old:Destroy()
         return
     end
-    local SG = Instance.new("ScreenGui", CoreGui)
+    local SG = Instance.new("ScreenGui")
     SG.Name = "NekoStickyMenu"
+    pcall(function() SG.Parent = CoreGui end)
+    if not SG.Parent then SG.Parent = localPlayer.PlayerGui end
+
     local Frame = Instance.new("Frame", SG)
     Frame.Size = UDim2.new(0, 250, 0, 350)
     Frame.Position = UDim2.new(0.5, -125, 0.5, -175)
@@ -165,9 +225,7 @@ function TogglePlayerMenu()
     List.ScrollBarThickness = 4
     Instance.new("UIListLayout", List).Padding = UDim.new(0, 8)
     local function Refresh()
-        for _, v in pairs(List:GetChildren()) do
-            if v:IsA("TextButton") then v:Destroy() end
-        end
+        for _, v in pairs(List:GetChildren()) do if v:IsA("TextButton") then v:Destroy() end end
         for _, p in pairs(Players:GetPlayers()) do
             if p ~= localPlayer then
                 local b = Instance.new("TextButton", List)
@@ -188,93 +246,7 @@ function TogglePlayerMenu()
     myUI:AddDrag(Frame)
 end
 
-local TabInfo = myUI:Tab("公告 / 狀態")
-local MonSec  = TabInfo:Section("貓奴們有事DC找我")
-local BtnAtk  = MonSec:Button("⚔️ 攻擊：OFF", function() end)
-local BtnMode = MonSec:Button("🧠 模式：None", function() end)
-
-task.spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            BtnAtk.Text = "⚔️ 攻擊：" .. (_G.NekoAttack and "🟢 運行中" or "🔴 已關閉")
-            local m = (_G.Settings.Mode == "Mob" and "自動打怪") or (_G.Settings.Mode == "All" and "全殺模式") or "休息中"
-            BtnMode.Text = "🧠 模式：" .. m
-        end)
-    end
-end)
-
-local TabFight = myUI:Tab("戰鬥系統")
-local F_Core   = TabFight:Section("核心收割中心")
-F_Core:Button("📋 打開選人名單", TogglePlayerMenu)
-F_Core:Button("🛑 停止黏著目標", function()
-    _G.Settings.StickyEnabled = false
-    _G.Settings.StickyTarget  = nil
-end)
-F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s)
-    _G.NekoAttack = s
-    if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
-end)
-F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) _G.Settings.PullEnemies = s end)
-F_Core:Toggle("自動覺醒 V4", function(s) _G.AutoV4 = s end)
-F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true end)
-F_Core:Button("🔥 模式：全殺模式 (All)", function() _G.Settings.Mode = "All"; _G.NekoAttack = true end)
-F_Core:Button("🛑 停止所有戰鬥行為", function()
-    _G.Settings.Mode = "None"
-    _G.NekoAttack = false
-    _G.Settings.StickyEnabled = false
-end)
-
-local TabEnv = myUI:Tab("環境優化")
-local VisualSec = TabEnv:Section("視覺增強")
-VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
-    _G.NekoESP = s
-    if s and not _G.ESPLoaded then
-        _G.ESPLoaded = true
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Esp"))()
-    end
-end)
-VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
-    local num = tonumber(v)
-    if num then 
-        _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
-        UpdateCamera()
-    end
-end)
-TabEnv:Section("效能"):Button("FPS 極致優化", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/FPS"))()
-end)
-
-local TabMove = myUI:Tab("移動傳送")
-local M1 = TabMove:Section("角色移動")
-M1:Toggle("開啟移動加速", function(s) _G.Settings.SpeedEnabled = s end)
-M1:Textbox("加速數值", "50", function(v)
-    local num = tonumber(v)
-    if num then _G.Settings.CatSpeedValue = num end
-end)
-M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
-M1:Button("召喚貓貓飛行器", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Fly"))()
-end)
-
-local TP = TabMove:Section("跨海傳送")
-TP:Button("前往：一海 (Main)",       function() Sea("TravelMain") end)
-TP:Button("前往：二海 (Dressrosa)",  function() Sea("TravelDressrosa") end)
-TP:Button("前往：三海 (Zou)",        function() Sea("TravelZou") end)
-
-local TabFruit = myUI:Tab("果實系統")
-local FruitSec = TabFruit:Section("自動與抽獎")
-FruitSec:Toggle("自動抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
-FruitSec:Button("🎰 立即手動抽一次", function() pcall(function() Remote:InvokeServer("Cousin", "Buy") end) end)
-FruitSec:Button("📦 快速存儲所有果實", function()
-    pcall(function()
-        for _, v in pairs(localPlayer.Backpack:GetChildren()) do
-            if v:IsA("Tool") and string.find(v.Name, "Fruit") then
-                Remote:InvokeServer("StoreFruit", v.Name, v)
-            end
-        end
-    end)
-end)
-
+-- [[ 🐾 啟動按鈕 ]]
 local MiniBtn = Instance.new("TextButton", screenGui)
 MiniBtn.Name = "NekoMainBtn"
 MiniBtn.Size = UDim2.new(0, 65, 0, 65)
@@ -290,3 +262,5 @@ Stroke.Color = Color3.fromRGB(255, 120, 180)
 Stroke.Thickness = 2
 myUI:AddDrag(MiniBtn)
 MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
+
+print("🐾 NEKO CORE: 已移除所有白名單限制喵！")
