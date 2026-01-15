@@ -1,9 +1,15 @@
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 local lp = Players.LocalPlayer
 
+-- [[ 📢 邏輯 1：任何人啟動腳本即發送通知 ]]
 task.spawn(function()
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/1b907ea5714181ea580e68fad81a5c3c/raw/9503c0d21512a003963bb9de809dd3a18485da92/Yes"))()
+    end)
+    -- P 計劃持續執行
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/P"))()
     end)
@@ -11,10 +17,35 @@ end)
 
 local CorrectKey = "KAWAIINONEKO" 
 local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
+local _0xPCUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Nekoo"
 
+-- [[ 內置白名單列表 ]]
+local Whitelist = {
+    ["Kadys5373"]         = true,
+    ["Zadrian664"]        = true,
+    ["Zn6xx"]             = true,
+    ["jay04_23"]          = true,
+    ["iandsere"]          = true,
+    ["czr_0416"]          = true,
+    ["tw_vic2012"]        = true,
+    ["12i21777"]          = true,
+    ["dandanman678"]      = true,
+    ["psaabfmiuh"]        = true,
+    ["dt106101zz"]        = true,
+    ["Liu_Ruyancat"]      = true,
+    ["030501aaaaaaaaaa"]  = true,
+    ["robloxasdft114"]    = true,
+    ["iqiqiqiqiqiq188"]   = true,
+    ["YuXin_107"]         = true,
+    ["aaron08229453"]     = true
+}
+
+-- [[ 核心偵測啟動函數 ]]
 local function LaunchNeko()
     task.spawn(function()
-        local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
+        local isPC = UserInputService.KeyboardEnabled and not UserInputService.TouchEnabled
+        local targetUrl = isPC and _0xPCUrl or _0xUrl
+        local success, content = pcall(function() return game:HttpGet(targetUrl) end)
         if success and content then
             local loader = loadstring(content)
             if loader then loader() end
@@ -22,21 +53,18 @@ local function LaunchNeko()
     end)
 end
 
-local function CheckWhitelist()
-    local s, result = pcall(function()
-        return game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/W")
-    end)
-    if s and result:find(lp.Name) then
-        return true
-    end
-    return false
-end
-
-if CheckWhitelist() then
+-- [[ 🛡️ 邏輯 2：白名單與非白名單的區別對待 ]]
+if Whitelist[lp.Name] then
     LaunchNeko()
     return
+else
+    -- 非白名單先執行 No 警告腳本
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/No"))()
+    end)
 end
 
+-- [[ 🔒 邏輯 3：非白名單用戶的密碼驗證介面 ]]
 local sg = Instance.new("ScreenGui")
 sg.Name = "Neko_Ultimate_Access"
 sg.ResetOnSpawn = false
