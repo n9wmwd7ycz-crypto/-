@@ -5,6 +5,7 @@ local CoreGui           = game:GetService("CoreGui")
 local RunService        = game:GetService("RunService")
 local UserInputService  = game:GetService("UserInputService")
 local TweenService      = game:GetService("TweenService")
+local Workspace         = game:GetService("Workspace")
 local localPlayer       = Players.LocalPlayer
 
 -- 防止重複執行
@@ -27,7 +28,8 @@ _G.Settings = {
     StickyOffset  = CFrame.new(3, 0, 7),
     SnapDistance  = 500,
     LerpSpeed     = 0.35,
-    AutoBuyFruit  = false
+    AutoBuyFruit  = false,
+    FruitESP      = false
 }
 
 _G.NekoRunning = true
@@ -43,11 +45,29 @@ local function Sea(cmd)
 end
 
 local function NuclearClean()
-    local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn"}
+    local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn", "NekoFruitESP"}
     for _, name in ipairs(targets) do
         local obj = CoreGui:FindFirstChild(name) or localPlayer:FindFirstChild("PlayerGui"):FindFirstChild(name)
         if obj then pcall(function() obj:Destroy() end) end
     end
+end
+
+-- 果實 ESP 繪製
+local FruitFolder = CoreGui:FindFirstChild("NekoFruitESP") or Instance.new("Folder", CoreGui)
+FruitFolder.Name = "NekoFruitESP"
+
+local function CreateFruitESP(fruit)
+    if not fruit:FindFirstChild("Handle") then return end
+    local bb = Instance.new("BillboardGui", FruitFolder)
+    bb.Name = fruit.Name; bb.Adornee = fruit.Handle; bb.AlwaysOnTop = true
+    bb.Size = UDim2.new(0, 150, 0, 50); bb.ExtentsOffset = Vector3.new(0, 3, 0)
+    local txt = Instance.new("TextLabel", bb)
+    txt.Size = UDim2.new(1, 0, 1, 0); txt.BackgroundTransparency = 1
+    txt.TextColor3 = Color3.fromRGB(255, 255, 100); txt.TextStrokeTransparency = 0
+    txt.Font = Enum.Font.GothamBold; txt.TextSize = 14
+    txt.Text = "🍎 [ " .. fruit.Name:gsub("Fruit", "") .. " ]"
+    txt.Visible = _G.Settings.FruitESP
+    fruit.AncestryChanged:Connect(function() if not fruit:IsDescendantOf(Workspace) then bb:Destroy() end end)
 end
 
 -- 黏人名單視窗邏輯
@@ -159,14 +179,12 @@ if success then
             end
         end)
         
-        -- [[ 修正後的鏡頭縮放邏輯 ]]
         VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
             local num = tonumber(v)
             if num then 
                 _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
                 pcall(function() 
                     localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
-                    -- 強制觸發縮放更新
                     localPlayer.CameraMinZoomDistance = 0
                 end)
             end
@@ -202,6 +220,29 @@ if success then
 
         -- === 分頁 5: 果實系統 ===
         local TabFruit = myUI:Tab("果實系統")
+        
+        -- 新增的純果探區塊
+        local FruitRadar = TabFruit:Section("地圖果實偵測")
+        FruitRadar:Toggle("開啟果實透視 (ESP)", function(s)
+            _G.Settings.FruitESP = s
+            for _, gui in pairs(FruitFolder:GetChildren()) do
+                if gui:IsA("BillboardGui") then gui.TextLabel.Visible = s end
+            end
+        end)
+        FruitRadar:Button("🚀 立即傳送拾取所有果實", function()
+            local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+            for _, v in pairs(Workspace:GetChildren()) do
+                if v:IsA("Tool") and (v.Name:find("Fruit") or v:FindFirstChild("Handle")) then
+                    local target = v:FindFirstChild("Handle") or v:FindFirstChildOfClass("Part")
+                    if target then
+                        hrp.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                        task.wait(0.5)
+                    end
+                end
+            end
+        end)
+
         local FruitSec = TabFruit:Section("自動與抽獎")
         FruitSec:Toggle("自動抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
         FruitSec:Button("🎰 立即手動抽一次", function() pcall(function() Remote:InvokeServer("Cousin", "Buy") end) end)
@@ -235,6 +276,20 @@ if success then
 end
 
 -- [[ 5. 後台任務與監聽 ]]
+-- 果實生成自動監聽
+Workspace.ChildAdded:Connect(function(child)
+    task.wait(0.1)
+    if child:IsA("Tool") and (child.Name:find("Fruit") or child:FindFirstChild("Handle")) then
+        CreateFruitESP(child)
+    end
+end)
+-- 初始掃描地圖果實
+for _, v in pairs(Workspace:GetChildren()) do
+    if v:IsA("Tool") and (v.Name:find("Fruit") or v:FindFirstChild("Handle")) then
+        CreateFruitESP(v)
+    end
+end
+
 task.spawn(function()
     pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/PvP"))() end)
 end)
@@ -270,4 +325,4 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
-print("🐾 NEKO CORE: 鏡頭修復版已就緒喵！")
+print("🐾 NEKO CORE: 果探整合版已就緒喵！")
