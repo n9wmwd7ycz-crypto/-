@@ -5,6 +5,7 @@ local RunService        = game:GetService("RunService")
 local UserInputService  = game:GetService("UserInputService")
 local localPlayer       = Players.LocalPlayer
 
+-- [[ 影的運行鎖定 ]]
 if getgenv().NEKO_RUNNING then return end
 getgenv().NEKO_RUNNING = true
 
@@ -15,33 +16,7 @@ local function Sea(cmd)
     end)
 end
 
-local Whitelist = {
-    ["Kadys5373"]         = true,
-    ["Zadrian664"]        = true,
-    ["Zn6xx"]             = true,
-    ["jay04_23"]          = true,
-    ["iandsere"]          = true,
-    ["czr_0416"]          = true,
-    ["tw_vic2012"]        = true,
-    ["12i21777"]          = true,
-    ["dandanman678"]      = true,
-    ["psaabfmiuh"]        = true,
-    ["dt106101zz"]        = true,
-    ["Liu_Ruyancat"]      = true,
-    ["030501aaaaaaaaaa"]  = true,
-    ["robloxasdft114"]    = true,
-    ["iqiqiqiqiqiq188"]   = true,
-    ["YuXin_107"]         = true,
-    ["aaron08229453"]     = true
-}
-
-if not Whitelist[localPlayer.Name] then
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/No"))()
-    end)
-    return
-end
-
+-- [[ 清理舊 UI ]]
 local function NuclearClean()
     local targets = {"NEKO BF", "NekoUI", "NekoTerminal_Lib", "NekoStickyMenu", "NekoMainBtn"}
     for _, name in ipairs(targets) do
@@ -53,6 +28,7 @@ end
 NuclearClean()
 task.wait(0.3)
 
+-- [[ 全域設定 ]]
 _G.Settings = {
     ClickDelay    = 0.01,
     Distance      = 5000,
@@ -76,6 +52,7 @@ _G.NekoAttack  = false
 _G.AutoV4      = false
 _G.NekoESP     = false
 
+-- [[ 載入 UI 庫 ]]
 local success, UIContent = pcall(function()
     return game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Ui")
 end)
@@ -85,15 +62,14 @@ if not success then return end
 local NekoLib = loadstring(UIContent)()
 local myUI, screenGui = NekoLib.new("NEKO BF")
 
--- [[ 安全容器掛載 ]]
+-- [[ 容器設置 ]]
 pcall(function() screenGui.Parent = CoreGui end)
 if screenGui.Parent ~= CoreGui then screenGui.Parent = localPlayer:WaitForChild("PlayerGui") end
 
--- [[ 🚀 核心功能異步加載區 ]]
+-- [[ 🚀 功能渲染 (增加延遲確保按鈕出現) ]]
 task.spawn(function()
-    -- 給 UI 庫一點時間初始化分頁容器喵
-    task.wait(0.2)
-    
+    task.wait(0.2) -- 給 UI 殼一點緩衝時間喵
+
     local TabInfo = myUI:Tab("公告 / 狀態")
     local MonSec  = TabInfo:Section("貓奴們有事DC找我")
     local BtnAtk  = MonSec:Button("⚔️ 攻擊：OFF", function() end)
@@ -143,7 +119,7 @@ task.spawn(function()
         local num = tonumber(v)
         if num then 
             _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
-            UpdateCamera()
+            pcall(function() localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom end)
         end
     end)
     TabEnv:Section("效能"):Button("FPS 極致優化", function()
@@ -182,10 +158,10 @@ task.spawn(function()
     end)
 end)
 
--- [[ 其他後台循環 ]]
+-- [[ 後台功能循環 ]]
 task.spawn(function()
     pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/PvP"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/PvP"))()
     end)
 end)
 
@@ -215,22 +191,12 @@ task.spawn(function()
     end
 end)
 
-local function UpdateCamera()
-    pcall(function()
-        localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
-        workspace.CurrentCamera.FieldOfView = _G.Settings.FOV
-    end)
-end
-
-UpdateCamera()
-
 UserInputService.JumpRequest:Connect(function()
     if _G.Settings.InfJump then
         pcall(function()
             local char = localPlayer.Character
-            if char then
-                local hum = char:FindFirstChildOfClass("Humanoid")
-                if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
             end
         end)
     end
@@ -246,6 +212,7 @@ function TogglePlayerMenu()
     SG.Name = "NekoStickyMenu"
     pcall(function() SG.Parent = CoreGui end)
     if not SG.Parent then SG.Parent = localPlayer.PlayerGui end
+
     local Frame = Instance.new("Frame", SG)
     Frame.Size = UDim2.new(0, 250, 0, 350)
     Frame.Position = UDim2.new(0.5, -125, 0.5, -175)
@@ -279,6 +246,7 @@ function TogglePlayerMenu()
     myUI:AddDrag(Frame)
 end
 
+-- [[ 🐾 啟動按鈕 ]]
 local MiniBtn = Instance.new("TextButton", screenGui)
 MiniBtn.Name = "NekoMainBtn"
 MiniBtn.Size = UDim2.new(0, 65, 0, 65)
@@ -294,3 +262,5 @@ Stroke.Color = Color3.fromRGB(255, 120, 180)
 Stroke.Thickness = 2
 myUI:AddDrag(MiniBtn)
 MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
+
+print("🐾 NEKO CORE: 已移除所有白名單限制喵！")
