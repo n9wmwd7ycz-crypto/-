@@ -1,25 +1,22 @@
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
 local lp = Players.LocalPlayer
 
 local _0xUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Neko"
-local _0xPCUrl = "https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/Nekoo"
 
 local Whitelist = {
-    ["Kadys5373"] = true, ["Zadrian664"] = true, ["Zn6xx"] = true, ["jay04_23"] = true,
-    ["iandsere"] = true, ["czr_0416"] = true, ["tw_vic2012"] = true, ["12i21777"] = true,
-    ["dandanman678"] = true, ["psaabfmiuh"] = true, ["dt106101zz"] = true, ["Liu_Ruyancat"] = true,
-    ["030501aaaaaaaaaa"] = true, ["robloxasdft114"] = true, ["iqiqiqiqiqiq188"] = true,
+    ["Kadys5373"] = true, ["Zadrian664"] = true, ["Zn6xx"] = true, 
+    ["jay04_23"] = true, ["iandsere"] = true, ["czr_0416"] = true, 
+    ["tw_vic2012"] = true, ["12i21777"] = true, ["dandanman678"] = true, 
+    ["psaabfmiuh"] = true, ["dt106101zz"] = true, ["Liu_Ruyancat"] = true, 
+    ["030501aaaaaaaaaa"] = true, ["robloxasdft114"] = true, ["iqiqiqiqiqiq188"] = true, 
     ["YuXin_107"] = true, ["aaron08229453"] = true, ["yoyowww99100"] = true
 }
 
 local function LaunchNeko()
     task.spawn(function()
-        local isPC = not UserInputService.TouchEnabled or UserInputService.KeyboardEnabled
-        local targetUrl = isPC and _0xPCUrl or _0xUrl
-        local success, content = pcall(function() return game:HttpGet(targetUrl) end)
+        local success, content = pcall(function() return game:HttpGet(_0xUrl) end)
         if success and content then
             local loader = loadstring(content)
             if loader then loader() end
