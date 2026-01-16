@@ -158,18 +158,25 @@ if success then
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Esp"))()
             end
         end)
+        
+        -- [[ 修正後的鏡頭縮放邏輯 ]]
         VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
             local num = tonumber(v)
             if num then 
                 _G.Settings.MaxZoom = math.clamp(num, 1, 5000)
-                pcall(function() localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom end)
+                pcall(function() 
+                    localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
+                    -- 強制觸發縮放更新
+                    localPlayer.CameraMinZoomDistance = 0
+                end)
             end
         end)
+        
         TabEnv:Section("效能"):Button("FPS 極致優化", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/FPS"))()
         end)
 
-        -- === 分頁 4: 移動傳送 (包含搬家後的黏人) ===
+        -- === 分頁 4: 移動傳送 ===
         local TabMove = myUI:Tab("移動傳送")
         local M1 = TabMove:Section("角色移動")
         
@@ -263,4 +270,4 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
-print("🐾 NEKO CORE: 完全體已就緒喵！")
+print("🐾 NEKO CORE: 鏡頭修復版已就緒喵！")
