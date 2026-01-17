@@ -23,8 +23,8 @@ _G.Settings = {
     CatSpeedValue = 50,
     SpeedEnabled  = false,
     InfJump       = false,
-    SuperJumpEnabled = false, -- 超級跳開關
-    SuperJumpHeight = 150,    -- 超級跳高度
+    SuperJumpEnabled = false,
+    SuperJumpHeight = 150,
     StickyEnabled = false,
     StickyTarget  = nil,
     StickyOffset  = CFrame.new(3, 0, 7),
@@ -54,7 +54,7 @@ local function NuclearClean()
     end
 end
 
--- 果實 ESP 繪製
+-- 果實 ESP 繪製核心
 local FruitFolder = CoreGui:FindFirstChild("NekoFruitESP") or Instance.new("Folder", CoreGui)
 FruitFolder.Name = "NekoFruitESP"
 
@@ -69,7 +69,54 @@ local function CreateFruitESP(fruit)
     txt.Font = Enum.Font.GothamBold; txt.TextSize = 14
     txt.Text = "🍎 [ " .. fruit.Name:gsub("Fruit", "") .. " ]"
     txt.Visible = _G.Settings.FruitESP
-    fruit.AncestChanged:Connect(function() if not fruit:IsDescendantOf(Workspace) then bb:Destroy() end end)
+    fruit.AncestryChanged:Connect(function() if not fruit:IsDescendantOf(Workspace) then bb:Destroy() end end)
+end
+
+-- 黏人名單視窗邏輯
+function TogglePlayerMenu(myUI)
+    if CoreGui:FindFirstChild("NekoStickyMenu") or localPlayer.PlayerGui:FindFirstChild("NekoStickyMenu") then
+        local old = CoreGui:FindFirstChild("NekoStickyMenu") or localPlayer.PlayerGui:FindFirstChild("NekoStickyMenu")
+        old:Destroy()
+        return
+    end
+    local SG = Instance.new("ScreenGui")
+    SG.Name = "NekoStickyMenu"
+    pcall(function() SG.Parent = CoreGui end)
+    if not SG.Parent then SG.Parent = localPlayer.PlayerGui end
+
+    local Frame = Instance.new("Frame", SG)
+    Frame.Size = UDim2.new(0, 250, 0, 350)
+    Frame.Position = UDim2.new(0.5, -125, 0.5, -175)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
+    
+    local List = Instance.new("ScrollingFrame", Frame)
+    List.Size = UDim2.new(1, -20, 1, -70)
+    List.Position = UDim2.new(0, 10, 0, 60)
+    List.BackgroundTransparency = 1
+    List.ScrollBarThickness = 4
+    Instance.new("UIListLayout", List).Padding = UDim.new(0, 8)
+    
+    local function Refresh()
+        for _, v in pairs(List:GetChildren()) do if v:IsA("TextButton") then v:Destroy() end end
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= localPlayer then
+                local b = Instance.new("TextButton", List)
+                b.Size = UDim2.new(1, 0, 0, 40)
+                b.Text = p.Name
+                b.BackgroundColor3 = (_G.Settings.StickyTarget == p) and Color3.fromRGB(255, 100, 150) or Color3.fromRGB(45, 45, 50)
+                b.TextColor3 = Color3.new(1,1,1)
+                Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+                b.MouseButton1Click:Connect(function()
+                    _G.Settings.StickyTarget  = p
+                    _G.Settings.StickyEnabled = true
+                    Refresh()
+                end)
+            end
+        end
+    end
+    Refresh()
+    if myUI then myUI:AddDrag(Frame) end
 end
 
 -- [[ 4. UI 載入與功能渲染 ]]
@@ -90,99 +137,208 @@ if success then
     task.spawn(function()
         task.wait(0.2)
 
-        -- 分頁跳過（公告/戰鬥/透視邏輯均無變動，直接進入環境與移動修復點）
-        local TabInfo  = myUI:Tab("公告 / 狀態")
+        -- === 分頁 1: 公告 / 狀態 ===
+        local TabInfo = myUI:Tab("公告 / 狀態")
+        local MonSec  = TabInfo:Section("貓奴們有事DC找我")
+        local BtnAtk  = MonSec:Button("⚔️ 攻擊：OFF", function() end)
+        local BtnMode = MonSec:Button("🧠 模式：None", function() end)
+
+        task.spawn(function()
+            while task.wait(0.5) do
+                pcall(function()
+                    BtnAtk.Text = "⚔️ 攻擊：" .. (_G.NekoAttack and "🟢 運行中" or "🔴 已關閉")
+                    local m = (_G.Settings.Mode == "Mob" and "自動打怪") or (_G.Settings.Mode == "All" and "全殺模式") or "休息中"
+                    BtnMode.Text = "🧠 模式：" .. m
+                end)
+            end
+        end)
+
+        -- === 分頁 2: 戰鬥系統 ===
         local TabFight = myUI:Tab("戰鬥系統")
-        
-        -- === 分頁 3: 環境優化 (修復視角) ===
+        local F_Core   = TabFight:Section("核心收割中心")
+        F_Core:Toggle("啟動神刀連擊 (FastAttack)", function(s)
+            _G.NekoAttack = s
+            if s and _G.Settings.Mode == "None" then _G.Settings.Mode = "All" end
+        end)
+        F_Core:Toggle("開啟貓抓拉怪 (Pull)", function(s) _G.Settings.PullEnemies = s end)
+        F_Core:Toggle("自動覺醒 V4", function(s) _G.AutoV4 = s end)
+        F_Core:Button("🧠 模式：自動打怪 (Mob)", function() _G.Settings.Mode = "Mob"; _G.NekoAttack = true end)
+        F_Core:Button("🔥 模式：全殺模式 (All)", function() _G.Settings.Mode = "All"; _G.NekoAttack = true end)
+        F_Core:Button("🛑 停止所有戰鬥行為", function()
+            _G.Settings.Mode = "None"
+            _G.NekoAttack = false
+            _G.Settings.StickyEnabled = false
+        end)
+
+        -- === 分頁 3: 環境優化 ===
         local TabEnv = myUI:Tab("環境優化")
         local VisualSec = TabEnv:Section("視覺增強")
+        VisualSec:Toggle("開啟貓貓透視 (ESP)", function(s)
+            _G.NekoESP = s
+            if s and not _G.ESPLoaded then
+                _G.ESPLoaded = true
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Esp"))()
+            end
+        end)
         
         VisualSec:Textbox("視野縮放 (鏡頭距離)", "128", function(v)
             local num = tonumber(v)
             if num then 
                 _G.Settings.MaxZoom = math.clamp(num, 1, 10000)
                 pcall(function() 
-                    -- 核心修復：強制更新玩家鏡頭屬性
                     localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
                     localPlayer.CameraMinZoomDistance = 0
                     
-                    -- 強制鏡頭重置刷新邏輯
                     local cam = Workspace.CurrentCamera
                     if cam then
                         local oldSubject = cam.CameraSubject
                         cam.CameraSubject = nil
                         task.wait()
                         cam.CameraSubject = oldSubject
-                        cam.FieldOfView = cam.FieldOfView + 0.1 -- 輕微抖動觸發渲染刷新
-                        task.wait()
-                        cam.FieldOfView = cam.FieldOfView - 0.1
                     end
                 end)
             end
         end)
+        
+        TabEnv:Section("效能"):Button("FPS 極致優化", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/FPS"))()
+        end)
 
-        -- === 分頁 4: 移動傳送 (修復跳躍) ===
+        -- === 分頁 4: 移動傳送 ===
         local TabMove = myUI:Tab("移動傳送")
         local M1 = TabMove:Section("角色移動")
         
-        M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
-        
-        -- 核心修正：超級跳躍與輸入框
-        M1:Toggle("開啟超級跳躍 (SuperJump)", function(s) 
-            _G.Settings.SuperJumpEnabled = s 
-            -- 開啟時自動將 JumpPower 模式設為對應高度
-            local hum = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if hum then hum.UseJumpPower = true end
-        end)
-        
-        M1:Textbox("超級跳高度", "150", function(v)
-            local num = tonumber(v)
-            if num then _G.Settings.SuperJumpHeight = num end
-        end)
-
-        -- 其餘 UI 按鈕保留（黏人、加速、飛行、跨海等）
         M1:Button("📋 打開黏人名單", function() TogglePlayerMenu(myUI) end)
+        M1:Button("🛑 停止黏著目標", function()
+            _G.Settings.StickyEnabled = false
+            _G.Settings.StickyTarget  = nil
+        end)
         M1:Toggle("開啟移動加速", function(s) _G.Settings.SpeedEnabled = s end)
         M1:Textbox("加速數值", "50", function(v)
             local num = tonumber(v)
             if num then _G.Settings.CatSpeedValue = num end
         end)
+        M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
         
-        -- 分頁 5: 果實系統 (保留原樣)
+        M1:Toggle("開啟超級跳躍 (SuperJump)", function(s) _G.Settings.SuperJumpEnabled = s end)
+        M1:Textbox("超級跳高度", "150", function(v)
+            local num = tonumber(v)
+            if num then _G.Settings.SuperJumpHeight = num end
+        end)
+
+        M1:Button("召喚貓貓飛行器", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Fly"))()
+        end)
+
+        local TP = TabMove:Section("跨海傳送")
+        TP:Button("前往：一海 (Main)",       function() Sea("TravelMain") end)
+        TP:Button("前往：二海 (Dressrosa)",  function() Sea("TravelDressrosa") end)
+        TP:Button("前往：三海 (Zou)",        function() Sea("TravelZou") end)
+
+        -- === 分頁 5: 果實系統 ===
         local TabFruit = myUI:Tab("果實系統")
-        
-        -- 🐾 懸浮按鈕邏輯保留
+        local FruitRadar = TabFruit:Section("地圖果實偵測")
+        FruitRadar:Toggle("開啟果實透視 (ESP)", function(s)
+            _G.Settings.FruitESP = s
+            for _, gui in pairs(FruitFolder:GetChildren()) do
+                if gui:IsA("BillboardGui") then gui.TextLabel.Visible = s end
+            end
+        end)
+        FruitRadar:Button("🚀 立即傳送拾取所有果實", function()
+            local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+            for _, v in pairs(Workspace:GetChildren()) do
+                if v:IsA("Tool") and (v.Name:find("Fruit") or v:FindFirstChild("Handle")) then
+                    local target = v:FindFirstChild("Handle") or v:FindFirstChildOfClass("Part")
+                    if target then
+                        hrp.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                        task.wait(0.5)
+                    end
+                end
+            end
+        end)
+
+        local FruitSec = TabFruit:Section("自動與抽獎")
+        FruitSec:Toggle("自動抽果實", function(s) _G.Settings.AutoBuyFruit = s end)
+        FruitSec:Button("🎰 立即手動抽一次", function() pcall(function() Remote:InvokeServer("Cousin", "Buy") end) end)
+        FruitSec:Button("📦 快速存儲所有果實", function()
+            pcall(function()
+                for _, v in pairs(localPlayer.Backpack:GetChildren()) do
+                    if v:IsA("Tool") and string.find(v.Name, "Fruit") then
+                        Remote:InvokeServer("StoreFruit", v.Name, v)
+                    end
+                end
+            end)
+        end)
+
+        -- 🐾 懸浮按鈕
         local MiniBtn = Instance.new("TextButton", screenGui)
         MiniBtn.Name = "NekoMainBtn"
+        MiniBtn.Size = UDim2.new(0, 65, 0, 65)
+        MiniBtn.Position = UDim2.new(0, 20, 0.5, -32)
         MiniBtn.Text = "🐾"
+        MiniBtn.TextSize = 30
+        MiniBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+        MiniBtn.TextColor3 = Color3.fromRGB(255, 120, 180)
+        MiniBtn.ZIndex = 10
+        Instance.new("UICorner", MiniBtn).CornerRadius = UDim.new(1, 0)
+        local Stroke = Instance.new("UIStroke", MiniBtn)
+        Stroke.Color = Color3.fromRGB(255, 120, 180)
+        Stroke.Thickness = 2
+        myUI:AddDrag(MiniBtn)
         MiniBtn.MouseButton1Click:Connect(function() myUI:Toggle() end)
     end)
 end
 
 -- [[ 5. 後台任務與監聽 ]]
-
--- 核心修正：整合跳躍監聽（確保超級跳絕對生效）
-UserInputService.JumpRequest:Connect(function()
-    local char = localPlayer.Character
-    local hum = char and char:FindFirstChildOfClass("Humanoid")
-    if not hum then return end
-
-    -- 1. 無限跳躍邏輯
-    if _G.Settings.InfJump then
-        pcall(function() hum:ChangeState(Enum.HumanoidStateType.Jumping) end)
+Workspace.ChildAdded:Connect(function(child)
+    task.wait(0.1)
+    if child:IsA("Tool") and (child.Name:find("Fruit") or child:FindFirstChild("Handle")) then
+        CreateFruitESP(child)
     end
+end)
 
-    -- 2. 超級跳躍邏輯修復
-    if _G.Settings.SuperJumpEnabled then
-        pcall(function() 
-            hum.UseJumpPower = true
-            hum.JumpPower = _G.Settings.SuperJumpHeight
-            -- 強制觸發一次跳躍狀態變更，解決部分執行器只改數值不跳的問題
-            hum:ChangeState(Enum.HumanoidStateType.Jumping)
+for _, v in pairs(Workspace:GetChildren()) do
+    if v:IsA("Tool") and (v.Name:find("Fruit") or v:FindFirstChild("Handle")) then
+        CreateFruitESP(v)
+    end
+end
+
+task.spawn(function()
+    pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/refs/heads/main/PvP"))() end)
+end)
+
+task.spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            if localPlayer.Character and not localPlayer.Character:FindFirstChild("HasBuso") then
+                Remote:InvokeServer("Buso")
+            end
         end)
     end
 end)
 
--- 其餘後台任務（果實監聽、武裝色、V4 等）完全保留，不准動其他邏輯
-print("🐾 NEKO CORE: 視角刷新與強制超級跳已修復！")
+task.spawn(function()
+    while task.wait(2) do
+        if _G.AutoV4 then
+            pcall(function()
+                local char = localPlayer.Character
+                local awk = localPlayer:FindFirstChild("Backpack"):FindFirstChild("Awakening") or (char and char:FindFirstChild("Awakening"))
+                if awk and awk:FindFirstChild("RemoteFunction") then awk.RemoteFunction:InvokeServer(true) end
+            end)
+        end
+    end
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    local hum = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if not hum then return end
+    if _G.Settings.InfJump then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+    if _G.Settings.SuperJumpEnabled then
+        hum.UseJumpPower = true
+        hum.JumpPower = _G.Settings.SuperJumpHeight
+        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
+
+print("🐾 NEKO CORE: 最終完整修復版已啟動喵！")
