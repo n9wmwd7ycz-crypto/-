@@ -23,6 +23,8 @@ _G.Settings = {
     CatSpeedValue = 50,
     SpeedEnabled  = false,
     InfJump       = false,
+    SuperJumpEnabled = false, -- 超級跳開關
+    SuperJumpHeight = 150,    -- 超級跳高度
     StickyEnabled = false,
     StickyTarget  = nil,
     StickyOffset  = CFrame.new(3, 0, 7),
@@ -186,6 +188,10 @@ if success then
                 pcall(function() 
                     localPlayer.CameraMaxZoomDistance = _G.Settings.MaxZoom
                     localPlayer.CameraMinZoomDistance = 0
+                    -- 強制重置一次鏡頭以修復部分執行器不生效問題
+                    if Workspace.CurrentCamera then
+                        Workspace.CurrentCamera.FieldOfView = Workspace.CurrentCamera.FieldOfView
+                    end
                 end)
             end
         end)
@@ -209,6 +215,14 @@ if success then
             if num then _G.Settings.CatSpeedValue = num end
         end)
         M1:Toggle("開啟無限跳躍", function(s) _G.Settings.InfJump = s end)
+        
+        -- 新增：超級跳功能區塊
+        M1:Toggle("開啟超級跳躍 (SuperJump)", function(s) _G.Settings.SuperJumpEnabled = s end)
+        M1:Textbox("超級跳高度", "150", function(v)
+            local num = tonumber(v)
+            if num then _G.Settings.SuperJumpHeight = num end
+        end)
+
         M1:Button("召喚貓貓飛行器", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/Fly"))()
         end)
@@ -316,13 +330,21 @@ task.spawn(function()
     end
 end)
 
+-- 整合跳躍監聽 (包含無限跳與超級跳)
 UserInputService.JumpRequest:Connect(function()
+    local char = localPlayer.Character
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if not hum then return end
+
+    -- 無限跳躍邏輯
     if _G.Settings.InfJump then
-        pcall(function()
-            local hum = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
-        end)
+        pcall(function() hum:ChangeState(Enum.HumanoidStateType.Jumping) end)
+    end
+
+    -- 超級跳躍邏輯
+    if _G.Settings.SuperJumpEnabled then
+        pcall(function() hum.JumpPower = _G.Settings.SuperJumpHeight end)
     end
 end)
 
-print("🐾 NEKO CORE: 果探整合版已就緒喵！")
+print("🐾 NEKO CORE: 超級跳與視野修復版已就緒喵！")
