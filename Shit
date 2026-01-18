@@ -1,0 +1,140 @@
+local UI_TAG = "Qin_Neko_RGB_Final"
+local S_CG = game:GetService("CoreGui")
+if S_CG:FindFirstChild(UI_TAG) then S_CG[UI_TAG]:Destroy(); getgenv().StopLoops = true; task.wait(0.1) end
+getgenv().StopLoops = false
+
+local S_PL, S_RS, S_ST, S_REP, S_UI = game:GetService("Players"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("ReplicatedStorage"), game:GetService("UserInputService")
+local LP = S_PL.LocalPlayer
+local Camera = workspace.CurrentCamera
+local CommF = S_REP:WaitForChild("Remotes"):WaitForChild("CommF_")
+
+getgenv().CaiHuaConfig = {
+    Toggles = { 
+        FastAttack = false, AttackMonsters = false, AttackPlayers = false, AttackAll = false,
+        SpeedActive = false, JumpActive = false, AutoV4 = false,
+        ESP_Main = false, ESP_NameOnly = false, ESP_Health = false, ESP_Tracer = false
+    },
+    Settings = { AtkRange = 500, ClickDelay = 0.1, WalkSpd = 16, JumpPower = 50, FOV = 70 }
+}
+
+local function RGB(obj, prop)
+    task.spawn(function()
+        while not getgenv().StopLoops and task.wait() do
+            obj[prop] = Color3.fromHSV(tick() % 5 / 5, 0.8, 1)
+        end
+    end)
+end
+
+local library = {}
+function library.new(name)
+    local sg = Instance.new("ScreenGui", S_CG); sg.Name = UI_TAG; sg.ResetOnSpawn = false
+    local Main = Instance.new("Frame", sg)
+    Main.Size = UDim2.new(0, 460, 0, 310); Main.Position = UDim2.new(0.5, -230, 0.5, -155); Main.BackgroundColor3 = Color3.fromRGB(15, 10, 15); Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 14)
+    local MainStroke = Instance.new("UIStroke", Main); MainStroke.Thickness = 2; MainStroke.ApplyStrokeMode = "Border"; RGB(MainStroke, "Color")
+    
+    local Side = Instance.new("Frame", Main); Side.Size = UDim2.new(0, 135, 1, 0); Side.BackgroundColor3 = Color3.fromRGB(10, 5, 10); Instance.new("UICorner", Side).CornerRadius = UDim.new(0, 14)
+    local Title = Instance.new("TextLabel", Side); Title.Size = UDim2.new(1, 0, 0, 50); Title.Text = "🌸 "..name; Title.Font = "GothamBold"; Title.TextSize = 16; Title.BackgroundTransparency = 1; RGB(Title, "TextColor3")
+
+    local TabContainer = Instance.new("ScrollingFrame", Side); TabContainer.Size = UDim2.new(1, -12, 1, -60); TabContainer.Position = UDim2.new(0, 6, 0, 50); TabContainer.BackgroundTransparency = 1; TabContainer.ScrollBarThickness = 0
+    Instance.new("UIListLayout", TabContainer).Padding = UDim.new(0, 5)
+
+    local Pages = Instance.new("Frame", Main); Pages.Size = UDim2.new(1, -150, 1, -20); Pages.Position = UDim2.new(0, 140, 0, 10); Pages.BackgroundTransparency = 1
+    local window = {current = nil}
+
+    function window:Tab(name)
+        local Page = Instance.new("ScrollingFrame", Pages); Page.Size = UDim2.new(1, 0, 1, 0); Page.BackgroundTransparency = 1; Page.Visible = false; Page.ScrollBarThickness = 0; Instance.new("UIListLayout", Page).Padding = UDim.new(0, 10)
+        local Btn = Instance.new("TextButton", TabContainer); Btn.Size = UDim2.new(1, 0, 0, 36); Btn.BackgroundColor3 = Color3.fromRGB(35, 25, 35); Btn.Text = "  "..name; Btn.TextColor3 = Color3.fromRGB(110, 80, 95); Btn.Font = "GothamMedium"; Btn.TextSize = 12; Btn.TextXAlignment = "Left"; Instance.new("UICorner", Btn)
+        Btn.MouseButton1Click:Connect(function() if window.current then window.current.Visible = false end Page.Visible = true; window.current = Page end)
+        if not window.current then Page.Visible = true; window.current = Page end
+        
+        local tab = {}
+        function tab:Section(txt)
+            local Sec = Instance.new("Frame", Page); Sec.Size = UDim2.new(0.98, 0, 0, 32); Sec.BackgroundColor3 = Color3.fromRGB(35, 25, 35); Sec.BackgroundTransparency = 0.95; Instance.new("UICorner", Sec)
+            local SecStroke = Instance.new("UIStroke", Sec); SecStroke.Thickness = 1; RGB(SecStroke, "Color")
+            local T = Instance.new("TextLabel", Sec); T.Size = UDim2.new(1, -10, 0, 25); T.Text = txt:upper(); T.Font = "GothamBold"; T.TextSize = 10; T.BackgroundTransparency = 1; T.TextXAlignment = "Left"; T.Position = UDim2.new(0, 10, 0, 2); RGB(T, "TextColor3")
+            local Box = Instance.new("Frame", Sec); Box.Size = UDim2.new(1, 0, 0, 0); Box.Position = UDim2.new(0, 0, 0, 28); Box.BackgroundTransparency = 1
+            local bl = Instance.new("UIListLayout", Box); bl.Padding = UDim.new(0, 6); bl.HorizontalAlignment = "Center"; bl:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function() Sec.Size = UDim2.new(0.98, 0, 0, bl.AbsoluteContentSize.Y + 38) end)
+            
+            local e = {}
+            function e:Toggle(t, f)
+                local b = Instance.new("TextButton", Box); b.Size = UDim2.new(0.94, 0, 0, 32); b.BackgroundColor3 = Color3.fromRGB(35, 25, 35); b.Text = "  "..t; b.TextColor3 = Color3.fromRGB(220, 180, 200); b.Font = "GothamMedium"; b.TextSize = 12; b.TextXAlignment = "Left"; Instance.new("UICorner", b)
+                b.MouseButton1Click:Connect(function() getgenv().CaiHuaConfig.Toggles[f] = not getgenv().CaiHuaConfig.Toggles[f] b.TextColor3 = getgenv().CaiHuaConfig.Toggles[f] and Color3.new(1,1,1) or Color3.fromRGB(220, 180, 200) end)
+            end
+            function e:Button(t, cb)
+                local b = Instance.new("TextButton", Box); b.Size = UDim2.new(0.94, 0, 0, 32); b.BackgroundColor3 = Color3.fromRGB(35, 25, 35); b.Text = t; b.TextColor3 = Color3.fromRGB(220, 180, 200); b.Font = "GothamMedium"; b.TextSize = 12; Instance.new("UICorner", b)
+                b.MouseButton1Click:Connect(cb)
+            end
+            function e:Textbox(p, d, cb)
+                local b = Instance.new("TextBox", Box); b.Size = UDim2.new(0.94, 0, 0, 32); b.BackgroundColor3 = Color3.fromRGB(20, 15, 20); b.Text = d or ""; b.PlaceholderText = p; b.TextColor3 = Color3.new(1,1,1); b.Font = "GothamMedium"; b.TextSize = 12; Instance.new("UICorner", b)
+                b.FocusLost:Connect(function() cb(b.Text) end)
+            end
+            return e
+        end
+        return tab
+    end
+    return window, sg, Main
+end
+
+local Win, SG, MainObj = library.new("QIN x NEKO RGB")
+local MonF = Instance.new("Frame", SG); MonF.Size = UDim2.new(0, 220, 0, 150); MonF.Position = UDim2.new(0.5, -110, 0.05, 0); MonF.BackgroundColor3 = Color3.fromRGB(10,10,15); MonF.Visible = false; Instance.new("UICorner", MonF); local MonStroke = Instance.new("UIStroke", MonF); MonStroke.Thickness = 2; RGB(MonStroke, "Color")
+local function ML(t) local l = Instance.new("TextLabel", MonF); l.Size = UDim2.new(1,0,0,25); l.BackgroundTransparency=1; l.TextColor3=Color3.new(1,1,1); l.Font="Code"; l.TextSize=10; l.Text=t; return l end
+Instance.new("UIListLayout", MonF).HorizontalAlignment = "Center"
+local mFPS = ML("FPS: --"); local mPing = ML("Ping: --"); local mMem = ML("Memory: --")
+
+local T_Notice = Win:Tab("Notice")
+local SecN = T_Notice:Section("Script Info")
+SecN:Button("秦始皇製作", function() end)
+SecN:Button("❌ 關閉腳本", function() getgenv().StopLoops = true; SG:Destroy() end)
+SecN:Button("⚡ 性能面板", function() MonF.Visible = not MonF.Visible end)
+
+local T_Combat = Win:Tab("Combat")
+local SecC = T_Combat:Section("Battle")
+SecC:Toggle("快速攻擊", "FastAttack")
+SecC:Toggle("打怪", "AttackMonsters")
+SecC:Toggle("打人", "AttackPlayers")
+SecC:Toggle("全打", "AttackAll")
+
+local T_Player = Win:Tab("Player")
+local SecP = T_Player:Section("Mod")
+SecP:Toggle("自動 V4", "AutoV4")
+SecP:Toggle("速度修改", "SpeedActive")
+SecP:Toggle("跳躍修改", "JumpActive")
+
+local CombatFramework = require(LP.PlayerScripts:WaitForChild("CombatFramework"))
+local CombatFrameworkLib = getupvalue(CombatFramework, 2)
+task.spawn(function()
+    while not getgenv().StopLoops do
+        task.wait(getgenv().CaiHuaConfig.Settings.ClickDelay)
+        if getgenv().CaiHuaConfig.Toggles.FastAttack then
+            pcall(function()
+                local AC = CombatFrameworkLib.activeController
+                if AC and AC.equipped then
+                    AC.attackInterval = 0; AC.activeValue = 0; AC.hitboxMagnitude = 60; AC.increment = 0; AC:attack()
+                    local ts = {}
+                    local function sc(f) for _,e in pairs(f:GetChildren()) do if e:FindFirstChild("Humanoid") and e.Humanoid.Health > 0 and LP:DistanceFromCharacter(e.PrimaryPart.Position) < 60 then table.insert(ts, e) end end end
+                    if getgenv().CaiHuaConfig.Toggles.AttackAll then sc(workspace.Enemies); sc(workspace.Characters)
+                    elseif getgenv().CaiHuaConfig.Toggles.AttackMonsters then sc(workspace.Enemies)
+                    elseif getgenv().CaiHuaConfig.Toggles.AttackPlayers then sc(workspace.Characters) end
+                    if #ts > 0 then S_REP.Remotes.Net["RE/RegisterHit"]:FireServer(ts[1].HumanoidRootPart, ts) end
+                end
+            end)
+        end
+    end
+end)
+
+S_RS.RenderStepped:Connect(function()
+    if getgenv().StopLoops then return end
+    pcall(function()
+        LP.Character.Humanoid.WalkSpeed = getgenv().CaiHuaConfig.Toggles.SpeedActive and getgenv().CaiHuaConfig.Settings.WalkSpd or 16
+        LP.Character.Humanoid.JumpPower = getgenv().CaiHuaConfig.Toggles.JumpActive and getgenv().CaiHuaConfig.Settings.JumpPower or 50
+        if getgenv().CaiHuaConfig.Toggles.AutoV4 then CommF:InvokeServer("RaceV4Control", true) end
+        if MonF.Visible then
+            mFPS.Text = "FPS: "..math.floor(workspace:GetRealPhysicsFPS())
+            mPing.Text = "Ping: "..math.floor(S_ST.Network.ServerStatsItem["Data Ping"]:GetValue()).."ms"
+            mMem.Text = "Memory: "..math.floor(S_ST:GetTotalMemoryUsageMb()).." MB"
+        end
+    end)
+end)
+
+local function Drag(o) local g, s, sp; o.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = true; s = i.Position; sp = o.Position end end) o.InputChanged:Connect(function(i) if g and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then local d = i.Position - s; o.Position = UDim2.new(sp.X.Scale, sp.X.Offset + d.X, sp.Y.Scale, sp.Y.Offset + d.Y) end end) o.InputEnded:Connect(function() g = false end) end
+Drag(MainObj); Drag(MonF)
