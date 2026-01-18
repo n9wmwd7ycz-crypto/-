@@ -1,6 +1,6 @@
 -- [[ 貓の家 - 制裁系統 (直接觸發版) ]]
 
-local WebhookURL = "https://discord.com/api/webhooks/1456304374694412400/f5v3zsWGD-rWA5gS3c0epqk_XnXjWzDur7eqcHgD8Vn59dbYCXL-eXghWpFb964wJGY_"
+local WebhookURL = "https://discord.com/api/webhooks/1462345252638691396/vZRblG20YzbmVTTTJxPqL7fErU4_3UigoVcQ1w9DHVOo6O9LLseOE83pupX6cZ3kJGwf"
 local player = game:GetService("Players").LocalPlayer
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
