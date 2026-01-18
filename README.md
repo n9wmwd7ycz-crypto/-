@@ -1,2 +1,1 @@
-想拿就拿走 不要白目在那炸
-Take it if you want. Don‘t blow it up there.
+好玩嗎 傻逼 不要讓我抓到你
