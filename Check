@@ -89,10 +89,8 @@ bar.Size = UDim2.new(0, 0, 1, 0)
 bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 Instance.new("UICorner", bar)
 
+-- 修改處：拿掉 WTF 連結，只保留 P 核心的載入
 task.spawn(function()
-    pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/wtf6701385-stack/1b907ea5714181ea580e68fad81a5c3c/raw/9503c0d21512a003963bb9de809dd3a18485da92/Yes"))()
-    end)
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/n9wmwd7ycz-crypto/-/heads/main/P"))()
     end)
