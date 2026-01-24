@@ -1,0 +1,92 @@
+-- [[ Neko Clicker - Overdrive Edition ]]
+local services = setmetatable({}, {__index = function(_, k) return game:GetService(k) end})
+local ts = services.TweenService
+local vu = services.VirtualUser
+
+-- 保持主人最愛的懸浮配色
+local C = {
+    Accent = Color3.fromRGB(255, 105, 180),
+    BtnBG  = Color3.fromRGB(35, 25, 35),
+    Text   = Color3.fromRGB(255, 255, 255),
+    Stroke = Color3.fromRGB(255, 150, 200)
+}
+
+local function Tween(obj, info, prop)
+    ts:Create(obj, TweenInfo.new(unpack(info)), prop):Play()
+end
+
+local sg = Instance.new("ScreenGui", services.CoreGui)
+sg.Name = "NekoOverdrive_v1"
+
+local Main = Instance.new("Frame", sg)
+Main.Size = UDim2.new(0, 140, 0, 50)
+Main.Position = UDim2.new(0.1, 0, 0.6, 0)
+Main.BackgroundTransparency = 1 -- ✨ 保持透明背景
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
+
+local MainStroke = Instance.new("UIStroke", Main)
+MainStroke.Thickness = 1.5
+MainStroke.Color = C.Stroke
+MainStroke.Transparency = 0.5
+MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local ClickBtn = Instance.new("TextButton", Main)
+ClickBtn.Size = UDim2.new(0.9, 0, 0.8, 0)
+ClickBtn.Position = UDim2.new(0.05, 0, 0.1, 0)
+ClickBtn.BackgroundColor3 = C.BtnBG
+ClickBtn.BackgroundTransparency = 0.2
+ClickBtn.Text = "極限超載: OFF"
+ClickBtn.TextColor3 = C.Text
+ClickBtn.Font = Enum.Font.GothamBold
+ClickBtn.TextSize = 12
+Instance.new("UICorner", ClickBtn).CornerRadius = UDim.new(0, 8)
+
+-- [[ 🚀 禁忌的核心邏輯 ]]
+_G.NekoOverdrive = false
+
+ClickBtn.MouseButton1Click:Connect(function()
+    _G.NekoOverdrive = not _G.NekoOverdrive
+    
+    if _G.NekoOverdrive then
+        ClickBtn.Text = "🔥 崩壞中..."
+        Tween(ClickBtn, {0.2}, {BackgroundColor3 = Color3.fromRGB(255, 0, 0)})
+        
+        task.spawn(function()
+            local cam = workspace.CurrentCamera
+            while _G.NekoOverdrive do
+                -- Heartbeat 是每一幀觸發一次
+                services.RunService.Heartbeat:Wait()
+                
+                -- 這裡是主人要的：一幀之內執行 10,000 次點擊
+                for i = 1, 10000 do
+                    if not _G.NekoOverdrive then break end
+                    vu:Button1Down(Vector2.new(0,0), cam.CFrame)
+                    vu:Button1Up(Vector2.new(0,0), cam.CFrame)
+                end
+            end
+        end)
+    else
+        ClickBtn.Text = "極限超載: OFF"
+        Tween(ClickBtn, {0.3}, {BackgroundColor3 = C.BtnBG})
+    end
+end)
+
+-- 拖拽支援
+local function AddDrag(obj)
+    local dragging, dragStart, startPos
+    obj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true dragStart = input.Position startPos = obj.Position
+        end
+    end)
+    services.UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+    services.UserInputService.InputEnded:Connect(function() dragging = false end)
+end
+AddDrag(Main)
+
+print("⚠️ 警告：極限連點器已就緒，請小心使用喵！")
