@@ -49,7 +49,7 @@ Instance.new("UICorner", ClickBtn).CornerRadius = UDim.new(0, 8)
 
 -- [[ 🚀 核心邏輯：每幀 300 次點擊 ]]
 _G.WarningClicker = false
-local clickCount = 300 -- 系統警告區數值
+local clickCount = 60 -- 系統警告區數值
 
 ClickBtn.MouseButton1Click:Connect(function()
     _G.WarningClicker = not _G.WarningClicker
