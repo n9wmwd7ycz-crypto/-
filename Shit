@@ -1,4 +1,6 @@
-local UI_TAG = "Neko_Script_V68"
+-- [[ 秦始皇 - 萬世開平 V68 ]]
+
+local UI_TAG = "Qin_Final_V68"
 local S_CG = game:GetService("CoreGui")
 if S_CG:FindFirstChild(UI_TAG) then S_CG[UI_TAG]:Destroy(); getgenv().StopLoops = true; task.wait(0.1) end
 getgenv().StopLoops = false
@@ -8,6 +10,7 @@ local LP = S_PL.LocalPlayer
 local Camera = workspace.CurrentCamera
 local CommF = S_REP:WaitForChild("Remotes"):WaitForChild("CommF_")
 
+-- [[ 1. 核心配置 ]]
 getgenv().CaiHuaConfig = {
     Toggles = { 
         FastAttack = false, AttackMonsters = false, AttackPlayers = false, AttackAll = false,
@@ -17,20 +20,22 @@ getgenv().CaiHuaConfig = {
     Settings = { AtkRange = 500, ClickDelay = 0.1, WalkSpd = 16, JumpPower = 50, FOV = 70 }
 }
 
+-- [[ 2. UI 框架 ]]
 local SG = Instance.new("ScreenGui", S_CG); SG.Name = UI_TAG; SG.ResetOnSpawn = false
 local function ApplyROG(obj, thick)
     local stroke = Instance.new("UIStroke", obj); stroke.Thickness = thick; stroke.ApplyStrokeMode = "Border"
     task.spawn(function() while not getgenv().StopLoops and task.wait(0.01) do stroke.Color = Color3.fromHSV(tick() % 5 / 5, 0.8, 1) end end)
 end
 
-local Main = Instance.new("Frame", SG); Main.BackgroundColor3 = Color3.fromRGB(15, 10, 15); Main.Position = UDim2.new(0.5, -250, 0.5, -180); Main.Size = UDim2.new(0, 500, 0, 420); Main.BorderSizePixel = 0; Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12); ApplyROG(Main, 3)
-local Side = Instance.new("Frame", Main); Side.Size = UDim2.new(0, 130, 1, 0); Side.BackgroundColor3 = Color3.fromRGB(20, 15, 20); Instance.new("UICorner", Side)
+local Main = Instance.new("Frame", SG); Main.BackgroundColor3 = Color3.fromRGB(15, 15, 20); Main.Position = UDim2.new(0.5, -250, 0.5, -180); Main.Size = UDim2.new(0, 500, 0, 420); Main.BorderSizePixel = 0; Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12); ApplyROG(Main, 3)
+local Side = Instance.new("Frame", Main); Side.Size = UDim2.new(0, 130, 1, 0); Side.BackgroundColor3 = Color3.fromRGB(22, 22, 28); Instance.new("UICorner", Side)
 Instance.new("UIListLayout", Side).HorizontalAlignment = "Center"; Instance.new("UIPadding", Side).PaddingTop = UDim.new(0, 10)
 
+-- 左側頭像
 local UserPart = Instance.new("Frame", Side); UserPart.Size = UDim2.new(1, 0, 0, 95); UserPart.BackgroundTransparency = 1
-local Avatar = Instance.new("ImageLabel", UserPart); Avatar.Size = UDim2.new(0, 45, 0, 45); Avatar.Position = UDim2.new(0.5, -22, 0, 0); Avatar.Image = "rbxthumb://type=AvatarHeadShot&id="..LP.UserId.."&w=150&h=150"; Instance.new("UICorner", Avatar).CornerRadius = UDim.new(1,0)
-local DN = Instance.new("TextLabel", UserPart); DN.Size = UDim2.new(1,0,0,15); DN.Position = UDim2.new(0,0,0,50); DN.Text = "🐾 "..LP.DisplayName; DN.TextColor3 = Color3.fromRGB(255, 105, 180); DN.Font = "GothamBold"; DN.TextSize = 10; DN.BackgroundTransparency = 1
-local UN = Instance.new("TextLabel", UserPart); UN.Size = UDim2.new(1,0,0,12); UN.Position = UDim2.new(0,0,0,65); UN.Text = "喵～ @"..LP.Name; UN.TextColor3 = Color3.fromRGB(180, 150, 180); UN.Font = "Gotham"; UN.TextSize = 8; UN.BackgroundTransparency = 1
+local Avatar = Instance.new("ImageLabel", UserPart); Avatar.Size = UDim2.new(0, 40, 0, 40); Avatar.Position = UDim2.new(0.5, -20, 0, 0); Avatar.Image = "rbxthumb://type=AvatarHeadShot&id="..LP.UserId.."&w=150&h=150"; Instance.new("UICorner", Avatar).CornerRadius = UDim.new(1,0)
+local DN = Instance.new("TextLabel", UserPart); DN.Size = UDim2.new(1,0,0,15); DN.Position = UDim2.new(0,0,0,45); DN.Text = LP.DisplayName; DN.TextColor3 = Color3.new(1,1,1); DN.Font = "GothamBold"; DN.TextSize = 10; DN.BackgroundTransparency = 1
+local UN = Instance.new("TextLabel", UserPart); UN.Size = UDim2.new(1,0,0,12); UN.Position = UDim2.new(0,0,0,60); UN.Text = "@"..LP.Name; UN.TextColor3 = Color3.fromRGB(180, 180, 180); UN.Font = "Gotham"; UN.TextSize = 8; UN.BackgroundTransparency = 1
 
 local Container = Instance.new("Frame", Main); Container.Position = UDim2.new(0, 140, 0, 10); Container.Size = UDim2.new(1, -150, 1, -20); Container.BackgroundTransparency = 1
 local Tabs = {}; local TabButtons = {}
@@ -38,93 +43,120 @@ local Tabs = {}; local TabButtons = {}
 local function CreateTab(name)
     local F = Instance.new("ScrollingFrame", Container); F.Size = UDim2.new(1, 0, 1, 0); F.BackgroundTransparency = 1; F.Visible = false; F.ScrollBarThickness = 2; F.AutomaticCanvasSize = "Y"
     Instance.new("UIListLayout", F).Padding = UDim.new(0, 8)
-    local B = Instance.new("TextButton", Side); B.Size = UDim2.new(0.9, 0, 0, 30); B.BackgroundColor3 = Color3.fromRGB(35, 25, 35); B.Text = name; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B)
+    local B = Instance.new("TextButton", Side); B.Size = UDim2.new(0.9, 0, 0, 28); B.BackgroundColor3 = Color3.fromRGB(35, 35, 45); B.Text = name; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B)
     B.MouseButton1Click:Connect(function() 
-        for i, v in pairs(Tabs) do v.Visible = false; TabButtons[i].BackgroundColor3 = Color3.fromRGB(35, 25, 35) end
-        F.Visible = true; B.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+        for i, v in pairs(Tabs) do v.Visible = false; TabButtons[i].BackgroundColor3 = Color3.fromRGB(35, 35, 45) end
+        F.Visible = true; B.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
     end)
     table.insert(Tabs, F); table.insert(TabButtons, B); return F
 end
 
 local function AddToggle(p, t, f)
-    local B = Instance.new("TextButton", p); B.Size = UDim2.new(0.95, 0, 0, 32); B.BackgroundColor3 = Color3.fromRGB(45, 35, 45); B.Text = "🐾 "..t.." [關閉喵]"; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B)
+    local B = Instance.new("TextButton", p); B.Size = UDim2.new(0.95, 0, 0, 32); B.BackgroundColor3 = Color3.fromRGB(45, 45, 55); B.Text = t.." [關閉]"; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B)
     B.MouseButton1Click:Connect(function() 
         getgenv().CaiHuaConfig.Toggles[f] = not getgenv().CaiHuaConfig.Toggles[f]
-        B.Text = "🐾 "..t..(getgenv().CaiHuaConfig.Toggles[f] and " [開啟喵]" or " [關閉喵]")
-        B.BackgroundColor3 = getgenv().CaiHuaConfig.Toggles[f] and Color3.fromRGB(255, 105, 180) or Color3.fromRGB(45, 35, 45)
+        B.Text = t..(getgenv().CaiHuaConfig.Toggles[f] and " [開啟]" or " [關閉]")
+        B.BackgroundColor3 = getgenv().CaiHuaConfig.Toggles[f] and Color3.fromRGB(150, 40, 40) or Color3.fromRGB(45, 45, 55)
     end)
 end
 
 local function AddSlider(p, t, min, max, def, isDec, cb)
     local F = Instance.new("Frame", p); F.Size = UDim2.new(0.95, 0, 0, 50); F.BackgroundTransparency = 1
-    local L = Instance.new("TextLabel", F); L.Size = UDim2.new(1,0,0,20); L.Text = "🐈 "..t..": "..def; L.TextColor3 = Color3.new(1,1,1); L.Font = "GothamBold"; L.TextSize = 10; L.BackgroundTransparency = 1; L.TextXAlignment = "Left"
-    local B = Instance.new("TextButton", F); B.Size = UDim2.new(1,0,0,8); B.Position = UDim2.new(0,0,0,25); B.BackgroundColor3 = Color3.fromRGB(60,40,60); B.Text = ""; Instance.new("UICorner", B)
-    local S = Instance.new("Frame", B); S.Size = UDim2.new((def-min)/(max-min), 0, 1, 0); S.BackgroundColor3 = Color3.fromRGB(255, 105, 180); Instance.new("UICorner", S)
-    B.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then local m; m = S_UI.InputChanged:Connect(function(i2) if i2.UserInputType == Enum.UserInputType.MouseMovement or i2.UserInputType == Enum.UserInputType.Touch then local pVal = math.clamp((i2.Position.X - B.AbsolutePosition.X) / B.AbsoluteSize.X, 0, 1); S.Size = UDim2.new(pVal, 0, 1, 0); local val = min + (max - min) * pVal; val = isDec and math.floor(val*100)/100 or math.floor(val); L.Text = "🐈 "..t..": "..val; cb(val) end end) S_UI.InputEnded:Connect(function(i3) if i3.UserInputType == Enum.UserInputType.MouseButton1 or i3.UserInputType == Enum.UserInputType.Touch then m:Disconnect() end end) end end)
+    local L = Instance.new("TextLabel", F); L.Size = UDim2.new(1,0,0,20); L.Text = t..": "..def; L.TextColor3 = Color3.new(1,1,1); L.Font = "GothamBold"; L.TextSize = 10; L.BackgroundTransparency = 1; L.TextXAlignment = "Left"
+    local B = Instance.new("TextButton", F); B.Size = UDim2.new(1,0,0,8); B.Position = UDim2.new(0,0,0,25); B.BackgroundColor3 = Color3.fromRGB(60,60,70); B.Text = ""; Instance.new("UICorner", B)
+    local S = Instance.new("Frame", B); S.Size = UDim2.new((def-min)/(max-min), 0, 1, 0); S.BackgroundColor3 = Color3.new(1,1,1); Instance.new("UICorner", S)
+    B.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then local m; m = S_UI.InputChanged:Connect(function(i2) if i2.UserInputType == Enum.UserInputType.MouseMovement or i2.UserInputType == Enum.UserInputType.Touch then local pVal = math.clamp((i2.Position.X - B.AbsolutePosition.X) / B.AbsoluteSize.X, 0, 1); S.Size = UDim2.new(pVal, 0, 1, 0); local val = min + (max - min) * pVal; val = isDec and math.floor(val*100)/100 or math.floor(val); L.Text = t..": "..val; cb(val) end end) S_UI.InputEnded:Connect(function(i3) if i3.UserInputType == Enum.UserInputType.MouseButton1 or i3.UserInputType == Enum.UserInputType.Touch then m:Disconnect() end end) end end)
 end
 
 local function AddButton(p, t, f)
-    local B = Instance.new("TextButton", p); B.Size = UDim2.new(0.95, 0, 0, 30); B.BackgroundColor3 = Color3.fromRGB(40, 30, 40); B.Text = "✨ "..t; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B); B.MouseButton1Click:Connect(f)
+    local B = Instance.new("TextButton", p); B.Size = UDim2.new(0.95, 0, 0, 30); B.BackgroundColor3 = Color3.fromRGB(40, 40, 50); B.Text = t; B.TextColor3 = Color3.new(1,1,1); B.Font = "GothamBold"; B.TextSize = 10; Instance.new("UICorner", B); B.MouseButton1Click:Connect(f)
 end
 
-local T_Notice = CreateTab("🐱 貓貓公告")
-local T_Combat = CreateTab("⚔️ 貓爪秒殺")
-local T_TP = CreateTab("📍 貓步傳送")
-local T_Player = CreateTab("🏃 貓體修改")
-local T_ESP = CreateTab("👁️ 貓眼透視")
-local T_Scripts = CreateTab("📂 外部貓糧")
+-- [[ 3. 分頁與內容 ]]
+local T_Notice = CreateTab("📜 腳本公告")
+local T_Combat = CreateTab("⚔️ 戰鬥秒殺")
+local T_TP = CreateTab("📍 傳送座標")
+local T_Player = CreateTab("🏃 玩家修改")
+local T_ESP = CreateTab("👁️ 透視相關")
+local T_Scripts = CreateTab("📂 外部腳本")
 
-AddButton(T_Notice, "🐱 貓腳本正式啟動", function() end)
-AddButton(T_Notice, "📅 更新日期: 2026/01/19", function() end)
-AddButton(T_Notice, "❌ 徹底關閉貓腳本", function() getgenv().StopLoops = true; SG:Destroy() end)
+-- 補回公告內容
+AddButton(T_Notice, "👺 秦始皇製作", function() end)
+AddButton(T_Notice, "更新日期:2026/01/17", function() end)
+AddButton(T_Notice, "狀態:腳本測試中", function() end)
+AddButton(T_Notice, "❌ 徹底關閉 UI 腳本", function() getgenv().StopLoops = true; SG:Destroy() end) -- 補回按鈕
 
-AddToggle(T_Combat, "開啟貓爪快攻", "FastAttack")
-AddSlider(T_Combat, "抓擊速度", 0.01, 0.5, 0.1, true, function(v) getgenv().CaiHuaConfig.Settings.ClickDelay = v end)
-AddSlider(T_Combat, "抓擊範圍", 100, 5000, 500, false, function(v) getgenv().CaiHuaConfig.Settings.AtkRange = v end)
-AddToggle(T_Combat, "模式: 只抓怪物", "AttackMonsters")
-AddToggle(T_Combat, "模式: 只抓玩家", "AttackPlayers")
-AddToggle(T_Combat, "模式: 通通都抓", "AttackAll")
+-- 外部腳本
+AddButton(T_Scripts, "🚀 GG 飛行", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jash-afk/Xuan/refs/heads/main/%E9%A3%9B%E8%A1%8C"))() end)
+AddButton(T_Scripts, "🔥 XA hub", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jush-cell/Xuan/refs/heads/main/XA"))() end)
+AddButton(T_Scripts, "🚀 P 腳本", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jush-cell/Xuan/refs/heads/main/p"))() end)
+AddButton(T_Scripts, "⚡ FPS 優化", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jush-cell/Xuan/refs/heads/main/FPPS"))() end)
+AddButton(T_Scripts, "☠️ 外老輔瞄", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jush-cell/Xuan/refs/heads/main/onsb.scripht.lua"))() end)
+AddButton(T_Scripts, "💩 零垃圾腳本", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jash-afk/Xuan/refs/heads/main/0%E8%85%B3%E6%9C%AC"))() end)
+AddButton(T_Scripts, "💩 LX trash", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jush-cell/josh/refs/heads/main/trash%20LX"))() end)
 
+-- 戰鬥
+AddToggle(T_Combat, "開啟快速攻擊", "FastAttack")
+AddSlider(T_Combat, "攻擊速度", 0.01, 0.5, 0.1, true, function(v) getgenv().CaiHuaConfig.Settings.ClickDelay = v end)
+AddSlider(T_Combat, "攻擊範圍", 100, 5000, 500, false, function(v) getgenv().CaiHuaConfig.Settings.AtkRange = v end)
+AddToggle(T_Combat, "模式: 只打怪物", "AttackMonsters")
+AddToggle(T_Combat, "模式: 只打玩家", "AttackPlayers")
+AddToggle(T_Combat, "模式: 全都打", "AttackAll")
+
+-- 傳送
 local function TPF(pos) pcall(function() LP.Character.HumanoidRootPart.CFrame = CFrame.new(pos) end) end
 AddButton(T_TP, "前往 一海", function() CommF:InvokeServer("TravelMain") end)
 AddButton(T_TP, "前往 二海", function() CommF:InvokeServer("TravelDressrosa") end)
 AddButton(T_TP, "前往 三海", function() CommF:InvokeServer("TravelZou") end)
-AddButton(T_TP, "傳送至豪宅", function() TPF(Vector3.new(-287.37, 305.81, 592.98)) end)
+AddButton(T_TP, "传送至天鹅房间", function() TPF(Vector3.new(2286.93, 15.06, 910.51)) end)
+AddButton(T_TP, "传送至豪宅", function() TPF(Vector3.new(-287.37, 305.81, 592.98)) end)
+AddButton(T_TP, "传送至鬼船", function() TPF(Vector3.new(-6501.06, 83.11, -123.52)) end)
+AddButton(T_TP, "传送至海洋城堡", function() TPF(Vector3.new(-12463.60, 376.26, -7566.08)) end)
+AddButton(T_TP, "传送至海龜豪宅", function() TPF(Vector3.new(-5060.41, 316.43, -3192.30)) end)
 
-AddToggle(T_Player, "自動貓咪覺醒(V4)", "AutoV4")
-AddSlider(T_Player, "貓咪視野(FOV)", 70, 150, 70, false, function(v) getgenv().CaiHuaConfig.Settings.FOV = v end)
-AddToggle(T_Player, "修改貓速", "SpeedActive"); AddSlider(T_Player, "速度", 16, 500, 16, false, function(v) getgenv().CaiHuaConfig.Settings.WalkSpd = v end)
-AddToggle(T_Player, "修改貓跳", "JumpActive"); AddSlider(T_Player, "跳躍", 50, 600, 50, false, function(v) getgenv().CaiHuaConfig.Settings.JumpPower = v end)
+-- 玩家
+AddToggle(T_Player, "自動 V4 覺醒", "AutoV4")
+AddSlider(T_Player, "視角 FOV", 70, 150, 70, false, function(v) getgenv().CaiHuaConfig.Settings.FOV = v end)
+AddToggle(T_Player, "修改速度", "SpeedActive"); AddSlider(T_Player, "速度", 16, 500, 16, false, function(v) getgenv().CaiHuaConfig.Settings.WalkSpd = v end)
+AddToggle(T_Player, "修改跳躍", "JumpActive"); AddSlider(T_Player, "跳躍", 50, 600, 50, false, function(v) getgenv().CaiHuaConfig.Settings.JumpPower = v end)
 
-AddToggle(T_ESP, "貓眼總開關", "ESP_Main")
-AddToggle(T_ESP, "顯示貓名", "ESP_NameOnly")
-AddToggle(T_ESP, "顯示血量與距離", "ESP_Health")
-AddToggle(T_ESP, "貓味射線", "ESP_Tracer")
+-- 透視
+AddToggle(T_ESP, "透視總開關", "ESP_Main")
+AddToggle(T_ESP, "顯示名稱與頭像", "ESP_NameOnly")
+AddToggle(T_ESP, "顯示變色血量與距離", "ESP_Health")
+AddToggle(T_ESP, "變色射線", "ESP_Tracer")
 
-AddButton(T_Scripts, "🚀 貓咪飛行", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiq180jash-afk/Xuan/refs/heads/main/%E9%A3%9B%E8%A1%8C"))() end)
-
-local MonF = Instance.new("Frame", SG); MonF.Size = UDim2.new(0, 220, 0, 170); MonF.Position = UDim2.new(0.5, -110, 0.05, 0); MonF.BackgroundColor3 = Color3.fromRGB(15, 10, 15); MonF.Visible = false; Instance.new("UICorner", MonF); ApplyROG(MonF, 2)
+-- [[ 4. 性能面板 ]]
+local MonF = Instance.new("Frame", SG); MonF.Size = UDim2.new(0, 220, 0, 170); MonF.Position = UDim2.new(0.5, -110, 0.05, 0); MonF.BackgroundColor3 = Color3.fromRGB(10,10,15); MonF.Visible = false; Instance.new("UICorner", MonF); ApplyROG(MonF, 2)
 local function ML(t, c) local l = Instance.new("TextLabel", MonF); l.Size = UDim2.new(1,0,0,25); l.BackgroundTransparency=1; l.TextColor3= c or Color3.new(1,1,1); l.Font="Code"; l.TextSize=10; l.Text=t; return l end
 Instance.new("UIListLayout", MonF).HorizontalAlignment = "Center"
-local mFPS = ML("貓速 FPS: --", Color3.fromRGB(0, 255, 127))
-local mPing = ML("貓延遲 Ping: --", Color3.fromRGB(255, 200, 0))
-AddButton(Side, "⚡ 貓咪性能", function() MonF.Visible = not MonF.Visible end)
+local mFPS = ML("FPS: --", Color3.fromRGB(0, 255, 127))
+local mPing = ML("Ping: --", Color3.fromRGB(255, 200, 0))
+local mMem = ML("內存: -- MB", Color3.fromRGB(0, 190, 255))
+ML("注入器: "..(identifyexecutor and identifyexecutor() or "未知"), Color3.fromRGB(255, 100, 100))
+ML("裝置: "..(S_UI.TouchEnabled and "📱" or "🖥️"), Color3.fromRGB(150, 150, 255))
+AddButton(Side, "⚡ 性能面板", function() MonF.Visible = not MonF.Visible end)
 
+-- [[ 5. ESP 系統 ]]
 local function CreateESP(p)
     if p == LP then return end
     local line = Drawing.new("Line"); line.Visible = false
     local bg = Instance.new("BillboardGui"); bg.Size = UDim2.new(0, 200, 0, 70); bg.AlwaysOnTop = true; bg.Enabled = false
+    local pImg = Instance.new("ImageLabel", bg); pImg.Size = UDim2.new(0, 35, 0, 35); pImg.Image = "rbxthumb://type=AvatarHeadShot&id="..p.UserId.."&w=150&h=150"; Instance.new("UICorner", pImg).CornerRadius = UDim.new(1,0)
     local nL = Instance.new("TextLabel", bg); nL.Size = UDim2.new(0, 150, 0, 25); nL.Position = UDim2.new(0, 40, 0, 0); nL.BackgroundTransparency = 1; nL.TextColor3 = Color3.new(1,1,1); nL.Font = "GothamBold"; nL.TextSize = 14; nL.TextXAlignment = "Left"
     local hL = Instance.new("TextLabel", bg); hL.Size = UDim2.new(0, 180, 0, 25); hL.Position = UDim2.new(0, 40, 0, 22); hL.BackgroundTransparency = 1; hL.Font = "GothamBold"; hL.TextSize = 13; hL.TextXAlignment = "Left"
+
     S_RS.RenderStepped:Connect(function()
         if getgenv().StopLoops or not p.Parent then bg:Destroy(); line:Remove(); return end
         local c = p.Character
         if c and c:FindFirstChild("HumanoidRootPart") and getgenv().CaiHuaConfig.Toggles.ESP_Main then
             bg.Adornee = c.HumanoidRootPart; bg.Parent = c.HumanoidRootPart; bg.Enabled = true
-            nL.Visible = getgenv().CaiHuaConfig.Toggles.ESP_NameOnly; nL.Text = "🐱 "..p.DisplayName
+            nL.Visible = getgenv().CaiHuaConfig.Toggles.ESP_NameOnly; pImg.Visible = nL.Visible
+            nL.Text = p.DisplayName
             hL.Visible = getgenv().CaiHuaConfig.Toggles.ESP_Health
             if c:FindFirstChild("Humanoid") then
-                hL.Text = "HP: "..math.floor(c.Humanoid.Health).." | "..math.floor(LP:DistanceFromCharacter(c.HumanoidRootPart.Position)).."m"
+                local dist = math.floor(LP:DistanceFromCharacter(c.HumanoidRootPart.Position))
+                hL.Text = "HP: " .. math.floor(c.Humanoid.Health) .. " | Dist: " .. dist .. "m"
                 hL.TextColor3 = Color3.fromHSV((c.Humanoid.Health/c.Humanoid.MaxHealth) * 0.35, 0.9, 1)
             end
             if getgenv().CaiHuaConfig.Toggles.ESP_Tracer then 
@@ -135,11 +167,13 @@ local function CreateESP(p)
     end)
 end
 
+-- [[ 6. 核心循環 ]]
 task.spawn(function()
     while not getgenv().StopLoops and task.wait(0.5) do
         if MonF.Visible then
-            mFPS.Text = "貓速 FPS: "..math.floor(workspace:GetRealPhysicsFPS())
-            mPing.Text = "貓延遲 Ping: "..math.floor(S_ST.Network.ServerStatsItem["Data Ping"]:GetValue()).."ms"
+            mFPS.Text = "FPS: "..math.floor(workspace:GetRealPhysicsFPS())
+            mPing.Text = "Ping: "..math.floor(S_ST.Network.ServerStatsItem["Data Ping"]:GetValue()).."ms"
+            mMem.Text = "Memory: "..math.floor(S_ST:GetTotalMemoryUsageMb()).." MB"
         end
     end
 end)
@@ -151,7 +185,9 @@ S_RS.RenderStepped:Connect(function()
         local H = LP.Character.Humanoid
         H.WalkSpeed = getgenv().CaiHuaConfig.Toggles.SpeedActive and getgenv().CaiHuaConfig.Settings.WalkSpd or 16
         H.JumpPower = getgenv().CaiHuaConfig.Toggles.JumpActive and getgenv().CaiHuaConfig.Settings.JumpPower or 50
-        if getgenv().CaiHuaConfig.Toggles.AutoV4 then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Control", true) end
+        if getgenv().CaiHuaConfig.Toggles.AutoV4 and H.Health > 0 then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Control", true)
+        end
     end)
 end)
 
@@ -174,7 +210,11 @@ task.spawn(function()
 end)
 
 S_PL.PlayerAdded:Connect(CreateESP); for _,v in pairs(S_PL:GetPlayers()) do CreateESP(v) end
-local CaiHuaBtn = Instance.new("TextButton", SG); CaiHuaBtn.Size = UDim2.new(0, 60, 0, 60); CaiHuaBtn.Position = UDim2.new(0, 30, 0, 30); CaiHuaBtn.BackgroundColor3 = Color3.new(0,0,0); CaiHuaBtn.Text = "🐱"; CaiHuaBtn.TextSize = 35; Instance.new("UICorner", CaiHuaBtn).CornerRadius = UDim.new(1,0); ApplyROG(CaiHuaBtn, 4)
+
+-- 🥦 Broccoli
+local CaiHuaBtn = Instance.new("TextButton", SG); CaiHuaBtn.Size = UDim2.new(0, 60, 0, 60); CaiHuaBtn.Position = UDim2.new(0, 30, 0, 30); CaiHuaBtn.BackgroundColor3 = Color3.new(0,0,0); CaiHuaBtn.Text = "🥦"; CaiHuaBtn.TextSize = 35; Instance.new("UICorner", CaiHuaBtn).CornerRadius = UDim.new(1,0); ApplyROG(CaiHuaBtn, 4)
 CaiHuaBtn.MouseButton1Click:Connect(function() Main.Visible = not Main.Visible end)
-local function Drag(o) local g, s, sp; o.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = true; s = i.Position; sp = o.Position end end) o.InputChanged:Connect(function(i) if g and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then local d = i.Position - s; o.Position = UDim2.new(sp.X.Scale, sp.X.Offset + d.X, sp.Y.Scale, sp.Y.Offset + d.Y) end end) o.InputEnded:Connect(function() g = false end) end
-Drag(Main); Drag(MonF); Drag(CaiHuaBtn); Tabs[1].Visible = true; TabButtons[1].BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+local function Drag(o) local g, s, sp; o.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = true; s = i.Position; sp = o.Position end end) o.InputChanged:Connect(function(i) if g and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then local d = i.Position - s; o.Position = UDim2.new(sp.X.Scale, sp.X.Offset + d.X, sp.Y.Scale, sp.Y.Offset + d.Y) end end) o.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = false end end) end
+Drag(Main); Drag(MonF); Drag(CaiHuaBtn); Tabs[1].Visible = true; TabButtons[1].BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+message.txt
+18 KB
