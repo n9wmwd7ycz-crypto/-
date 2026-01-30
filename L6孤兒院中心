@@ -1,12 +1,1031 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
 
-]]--
+local LocalPlayer = Players.LocalPlayer
+while not LocalPlayer do
+    Players.PlayerAdded:Wait()
+    LocalPlayer = Players.LocalPlayer
+end
 
-local v0=tonumber;local v1=string.byte;local v2=string.char;local v3=string.sub;local v4=string.gsub;local v5=string.rep;local v6=table.concat;local v7=table.insert;local v8=math.ldexp;local v9=getfenv or function() return _ENV;end ;local v10=setmetatable;local v11=pcall;local v12=select;local v13=unpack or table.unpack ;local v14=tonumber;local function v15(v16,v17,...) local v18=1;local v19;v16=v4(v3(v16,5),"..",function(v30) if (v1(v30,2)==81) then local v83=0;while true do if (v83==0) then v19=v0(v3(v30,1,1));return "";end end else local v84=0;local v85;while true do if (v84==0) then v85=v2(v0(v30,16));if v19 then local v109=v5(v85,v19);v19=nil;return v109;else return v85;end break;end end end end);local function v20(v31,v32,v33) if v33 then local v86=0 -0 ;local v87;while true do if (v86==(0 -0)) then v87=(v31/(((3 + 0) -1)^(v32-(2 -1))))%((621 -(555 + 64))^(((v33-((1328 -396) -(857 + 74))) -(v32-1)) + (569 -(367 + 201)))) ;return v87-(v87%(928 -(214 + 713))) ;end end else local v88=0;local v89;while true do if (0==v88) then v89=(1 + 1)^(v32-((1066 -(68 + 997)) + (1270 -(226 + 1044)))) ;return (((v31%(v89 + v89))>=v89) and (878 -(282 + 595))) or (1637 -(1523 + 114)) ;end end end end local function v21() local v34=0 -0 ;local v35;while true do if ((117 -(32 + 85))==v34) then v35=v1(v16,v18,v18);v18=v18 + (2 -1) + 0 ;v34=1 + 0 ;end if (v34==(958 -(892 + (120 -55)))) then return v35;end end end local function v22() local v36=0;local v37;local v38;while true do if (v36==(0 -0)) then v37,v38=v1(v16,v18,v18 + (352 -(87 + 263)) );v18=v18 + (182 -((266 -199) + 113)) ;v36=1 + 0 ;end if (v36==(2 -1)) then return (v38 * (189 + 67)) + v37 ;end end end local function v23() local v39=952 -(802 + 150) ;local v40;local v41;local v42;local v43;while true do if (v39==(2 -1)) then return (v43 * 16777216) + (v42 * (118879 -53343)) + (v41 * (187 + 69)) + v40 ;end if (v39==(997 -((1203 -288) + 82))) then v40,v41,v42,v43=v1(v16,v18,v18 + (8 -5) );v18=v18 + 3 + (1188 -(1069 + 118)) ;v39=1;end end end local function v24() local v44=0 -0 ;local v45;local v46;local v47;local v48;local v49;local v50;while true do if (v44==(3 -1)) then v49=v20(v46,4 + 17 ,54 -23 );v50=((v20(v46,32 + 0 )==(792 -(368 + (1124 -(376 + 325))))) and  -1) or (3 -(8 -6)) ;v44=3;end if ((2 + 1)==v44) then if (v49==(18 -(10 + 8))) then if (v48==(0 -0)) then return v50 * 0 ;else v49=(1362 -919) -(416 + 26) ;v47=1423 -(630 + 793) ;end elseif (v49==(6535 -4488)) then return ((v48==(0 + 0 + 0)) and (v50 * (((2 -1) + 0 + 0)/(0 -0)))) or (v50 * NaN) ;end return v8(v50,v49-((4183 -(447 + 966)) -(760 + 987)) ) * (v47 + (v48/((1915 -((4897 -3108) + 124))^(490 -((1962 -(1703 + 114)) + 293))))) ;end if (v44==(431 -((58 -(9 + 5)) + 386))) then v47=2 -1 ;v48=(v20(v46,1487 -(998 + 488) ,7 + 13 ) * ((2 + 0)^(804 -(201 + 571)))) + v45 ;v44=1140 -(116 + 1022) ;end if (v44==((376 -(85 + 291)) -0)) then v45=v23();v46=v23();v44=1 + 0 ;end end end local function v25(v51) local v52;if  not v51 then v51=v23();if (v51==(1265 -(243 + 1022))) then return "";end end v52=v3(v16,v18,(v18 + v51) -(3 -2) );v18=v18 + v51 ;local v53={};for v67=1, #v52 do v53[v67]=v2(v1(v3(v52,v67,v67)));end return v6(v53);end local v26=v23;local function v27(...) return {...},v12("#",...);end local function v28() local v54=(function() return 780 -(162 + 618) ;end)();local v55=(function() return;end)();local v56=(function() return;end)();local v57=(function() return;end)();local v58=(function() return;end)();local v59=(function() return;end)();local v60=(function() return;end)();while true do if (2==v54) then for v96= #"<",v23() do local v97=(function() return v21();end)();if (v20(v97, #".", #".")==(811 -(569 + 242))) then local v104=(function() return 0;end)();local v105=(function() return;end)();local v106=(function() return;end)();local v107=(function() return;end)();while true do if (v104==0) then v105=(function() return v20(v97,2 + 0 , #"xnx");end)();v106=(function() return v20(v97, #"0313",4 + 2 );end)();v104=(function() return 2 -1 ;end)();end if (v104~=(1 + 2)) then else if (v20(v106, #"nil", #"asd")== #"{") then v107[ #"0313"]=(function() return v60[v107[ #".com"]];end)();end v55[v96]=(function() return v107;end)();break;end if (v104~=(1025 -(706 + 318))) then else v107=(function() return {v22(),v22(),nil,nil};end)();if (v105==0) then local v117=(function() return 0 -0 ;end)();local v118=(function() return;end)();while true do if ((0 + 0)~=v117) then else v118=(function() return 1636 -(1373 + 263) ;end)();while true do if (v118==(1000 -(451 + 549))) then v107[ #"nil"]=(function() return v22();end)();v107[ #"asd1"]=(function() return v22();end)();break;end end break;end end elseif (v105== #"/") then v107[ #"-19"]=(function() return v23();end)();elseif (v105==(4 -2)) then v107[ #"-19"]=(function() return v23() -(2^(15 + 1)) ;end)();elseif (v105~= #"91(") then else local v349=(function() return 0;end)();local v350=(function() return;end)();while true do if ((700 -(271 + 429))~=v349) then else v350=(function() return 0 + 0 ;end)();while true do if (v350==(0 + 0)) then v107[ #"91("]=(function() return v23() -((2 -0)^(26 -10)) ;end)();v107[ #"0836"]=(function() return v22();end)();break;end end break;end end end v104=(function() return 2;end)();end if (v104~=(1386 -(746 + 638))) then else if (v20(v106, #"|", #",")~= #"\\") then else v107[1088 -(461 + 625) ]=(function() return v60[v107[2]];end)();end if (v20(v106,2,1 + 1 )== #"}") then v107[ #"19("]=(function() return v60[v107[ #"91("]];end)();end v104=(function() return 4 -1 ;end)();end end end end for v98= #"<",v23() do v56[v98-#"/" ]=(function() return v28();end)();end return v58;end if (v54== #"<") then local v93=(function() return 0 + 0 ;end)();while true do if (v93~=(1172 -(418 + 753))) then else for v110= #"/",v59 do local v111=(function() return 341 -(218 + 123) ;end)();local v112=(function() return;end)();local v113=(function() return;end)();local v114=(function() return;end)();while true do if (v111==(1582 -(1535 + 46))) then v114=(function() return nil;end)();while true do if (v112~= #":") then else if (v113== #"]") then v114=(function() return v21()~=(0 + 0) ;end)();elseif (v113==2) then v114=(function() return v24();end)();elseif (v113~= #"-19") then else v114=(function() return v25();end)();end v60[v110]=(function() return v114;end)();break;end if (v112~=(0 + 0)) then else local v224=(function() return 0 + 0 ;end)();local v225=(function() return;end)();while true do if (v224==(0 + 0)) then v225=(function() return 529 -(406 + 123) ;end)();while true do if (v225==(0 + 0)) then v113=(function() return v21();end)();v114=(function() return nil;end)();v225=(function() return 561 -(306 + 254) ;end)();end if (v225~=(1 + 0)) then else v112=(function() return  #":";end)();break;end end break;end end end end break;end if (v111~=(0 + 0)) then else v112=(function() return 1322 -(1249 + 73) ;end)();v113=(function() return nil;end)();v111=(function() return 1 -0 ;end)();end end end v58[ #"xxx"]=(function() return v21();end)();v93=(function() return 1469 -(899 + 568) ;end)();end if (v93~=2) then else v54=(function() return 1 + 1 ;end)();break;end if (v93==(0 + 0)) then v59=(function() return v23();end)();v60=(function() return {};end)();v93=(function() return 1;end)();end end end if (v54==0) then local v94=(function() return 0 -0 ;end)();local v95=(function() return;end)();while true do if (v94~=(603 -(268 + 335))) then else v95=(function() return 290 -(60 + 230) ;end)();while true do if (v95~=2) then else v54=(function() return  #"]";end)();break;end if (v95==(1145 -(466 + 679))) then v55=(function() return {};end)();v56=(function() return {};end)();v95=(function() return 573 -(426 + 146) ;end)();end if (v95==(2 -1)) then v57=(function() return {};end)();v58=(function() return {v55,v56,nil,v57};end)();v95=(function() return 1458 -(282 + 1174) ;end)();end end break;end end end end end local function v29(v61,v62,v63) local v64=v61[1 + 0 + 0 ];local v65=v61[1 + 1 ];local v66=v61[8 -5 ];return function(...) local v69=v64;local v70=v65;local v71=v66;local v72=v27;local v73=2 -1 ;local v74= -1;local v75={};local v76={...};local v77=v12("#",...) -(1 + 0) ;local v78={};local v79={};for v90=584 -(57 + 276 + 251) ,v77 do if (v90>=v71) then v75[v90-v71 ]=v76[v90 + (1428 -(41 + 1386)) ];else v79[v90]=v76[v90 + (104 -(17 + 86)) ];end end local v80=(v77-v71) + 1 + 0 ;local v81;local v82;while true do v81=v69[v73];v82=v81[(1 + 0) -(663 -(174 + 489)) ];if ((v82<=(46 -30)) or (2860<=181)) then if (v82<=((450 -277) -(122 + 44))) then if (v82<=(5 -2)) then if (v82<=(1906 -(830 + 1075))) then if (v82>0) then local v121=(0 + 0) -0 ;local v122;while true do if (v121==((524 -(303 + 221)) + 0)) then v122=v81[(1270 -(231 + 1038)) + 1 ];do return v79[v122](v13(v79,v122 + (1 -(0 -0)) ,v81[68 -(30 + 35) ]));end break;end end else local v123=v81[2 + 0 + (667 -(89 + 578)) ];local v124,v125=v72(v79[v123](v79[v123 + ((899 + 359) -(1043 + 214)) ]));v74=(v125 + v123) -((5 -2) -2) ;local v126=1212 -(323 + 889) ;for v226=v123,v74 do v126=v126 + 1 ;v79[v226]=v124[v126];end end elseif ((3222>=1527) and (v82==(5 -3))) then v79[v81[(485 + 97) -(361 + (1381 -(171 + 991))) ]]=v79[v81[3]];else for v229=v81[322 -(53 + (1100 -833)) ],v81[1 + 2 ] do v79[v229]=nil;end end elseif (v82<=((1122 -704) -(15 + 398))) then if (v82==(986 -(18 + 964))) then if  not v79[v81[2]] then v73=v73 + (3 -2) ;else v73=v81[3];end else v79[v81[2 + 0 ]]=v79[v81[3]][v81[3 + 1 ]];end elseif ((1505<=2121) and (v82==(856 -(20 + 830)))) then v79[v81[2 + 0 ]]=v79[v81[3]]%v81[9 -5 ] ;else v79[v81[128 -(116 + 9 + 1) ]]=v81[1 + 2 ] + v79[v81[742 -(542 + 196) ]] ;end elseif (v82<=11) then if (v82<=(18 -(1058 -(572 + 477)))) then if (v82>8) then local v133;local v134,v135;local v136;v79[v81[(3 -2) + 1 ]]=v79[v81[2 + 1 ]];v73=v73 + 1 ;v81=v69[v73];v79[v81[1 + 1 + 0 ]]=v62[v81[7 -(11 -7) ]];v73=v73 + (2 -1) ;v81=v69[v73];v79[v81[2]]=v62[v81[1554 -(1126 + 425) ]];v73=v73 + 1 ;v81=v69[v73];v79[v81[2 -0 ]]=v62[v81[3]];v73=v73 + (406 -(118 + 287)) ;v81=v69[v73];v79[v81[7 -5 ]]=v62[v81[1124 -(118 + 1003) ]];v73=v73 + (2 -1) ;v81=v69[v73];v79[v81[379 -(142 + 235) ]]=v79[v81[13 -10 ]];v73=v73 + 1 + 0 + 0 ;v81=v69[v73];v79[v81[979 -(553 + (510 -(84 + 2))) ]]=v79[v81[(8 -3) -(2 + 0) ]];v73=v73 + 1 + 0 ;v81=v69[v73];v79[v81[2]]=v79[v81[3 + 0 ]] + v81[(845 -(497 + 345)) + 1 ] ;v73=v73 + 1 + 0 + (0 -0) ;v81=v69[v73];v136=v81[2 + (1248 -(111 + 1137)) ];v134,v135=v72(v79[v136](v13(v79,v136 + (2 -1) ,v81[(165 -(91 + 67)) -4 ])));v74=(v135 + v136) -((5 -3) -1) ;v133=0 + 0 ;for v231=v136,v74 do v133=v133 + 1 ;v79[v231]=v134[v133];end v73=v73 + (4 -3) ;v81=v69[v73];v136=v81[755 -(239 + 514) ];v79[v136]=v79[v136](v13(v79,v136 + (1334 -(605 + 728)) + 0 ,v74));v73=v73 + (1330 -(797 + 380 + 152)) ;v81=v69[v73];v79[v81[2 + 0 ]]=v62[v81[2 + 1 ]];v73=v73 + (2 -1) ;v81=v69[v73];v79[v81[1204 -(373 + 829) ]]=v62[v81[3]];v73=v73 + (732 -(476 + 255)) ;v81=v69[v73];v79[v81[1132 -(369 + 761) ]]=v79[v81[(3 -1) + 1 ]];v73=v73 + (1 -0) ;v81=v69[v73];v79[v81[3 -1 ]]= #v79[v81[241 -(64 + 174) ]];v73=v73 + 1 + 0 + 0 ;v81=v69[v73];v79[v81[2 -(0 + 0) ]]=v79[v81[339 -((532 -388) + (715 -(423 + 100))) ]]%v79[v81[(2 + 218) -(42 + 174) ]] ;v73=v73 + 1 + 0 ;v81=v69[v73];v79[v81[(5 -3) + 0 ]]=v81[3] + v79[v81[2 + 0 + 2 ]] ;v73=v73 + (1505 -(363 + 1141)) ;v81=v69[v73];v79[v81[(4382 -2800) -(617 + 566 + 397) ]]= #v79[v81[8 -5 ]];v73=v73 + (772 -(326 + 445)) + 0 ;v81=v69[v73];v79[v81[2]]=v79[v81[3 + 0 ]]%v79[v81[1979 -(1913 + 62) ]] ;v73=v73 + (490 -(457 + 32)) + 0 ;v81=v69[v73];v79[v81[(3 + 2) -3 ]]=v81[1936 -(565 + (5969 -4601)) ] + v79[v81[15 -11 ]] ;v73=v73 + (1662 -(1477 + 184)) ;v81=v69[v73];v79[v81[2 -0 ]]=v79[v81[3]] + v81[4 + 0 ] ;v73=v73 + 1 ;v81=v69[v73];v136=v81[858 -((1256 -692) + 292) ];v134,v135=v72(v79[v136](v13(v79,v136 + (1 -0) ,v81[8 -5 ])));v74=(v135 + v136) -(305 -(244 + 60)) ;v133=(0 -0) + 0 ;for v234=v136,v74 do v133=v133 + ((450 + 27) -(41 + 435)) ;v79[v234]=v134[v133];end v73=v73 + 1 ;v81=v69[v73];v136=v81[1 + 1 ];v134,v135=v72(v79[v136](v13(v79,v136 + (1002 -(938 + 63)) ,v74)));v74=(v135 + v136) -1 ;v133=(711 -(530 + 181)) + 0 ;for v237=v136,v74 do local v238=1125 -(936 + 189) ;while true do if (v238==(0 + 0)) then v133=v133 + (1614 -((2446 -(614 + 267)) + (80 -(19 + 13)))) ;v79[v237]=v134[v133];break;end end end v73=v73 + 1 + (0 -0) ;v81=v69[v73];v136=v81[1140 -(782 + 356) ];v79[v136]=v79[v136](v13(v79,v136 + (268 -(176 + 91)) ,v74));v73=v73 + (3 -2) ;v81=v69[v73];v79[v81[4 -2 ]]=v79[v81[4 -(2 -1) ]]%v81[1096 -(975 + 57 + 60) ] ;v73=v73 + ((2672 -(588 + 208)) -(157 + 1718)) ;v81=v69[v73];v136=v81[2 + 0 ];v134,v135=v72(v79[v136](v79[v136 + (3 -(5 -3)) ]));v74=(v135 + v136) -1 ;v133=0 + 0 ;for v239=v136,v74 do local v240=0 -0 ;while true do if ((744==744) and (v240==0)) then v133=v133 + ((1791 -772) -(697 + 321)) ;v79[v239]=v134[v133];break;end end end v73=v73 + (2 -1) ;v81=v69[v73];v136=v81[3 -1 ];v79[v136](v13(v79,v136 + ((1813 -(1293 + 519)) -0) ,v74));else v73=v81[3];end elseif (v82>10) then local v172=0 -0 ;local v173;local v174;while true do if (v172==(1 + (1800 -(884 + 916)))) then for v319=(1 -0) -(0 -0) , #v78 do local v320=v78[v319];for v351=0 -0 , #v320 do local v352=1227 -(322 + (2362 -1457)) ;local v353;local v354;local v355;while true do if ((v352==((1170 -558) -(602 + 9))) or (1979>=2836)) then v355=v353[2];if ((1833<=2668) and (v354==v79) and (v355>=v173)) then v174[v355]=v354[v355];v353[1190 -(449 + 740) ]=v174;end break;end if ((3686==3686) and (v352==(872 -(826 + 46)))) then v353=v320[v351];v354=v353[1];v352=948 -(245 + 702) ;end end end end break;end if ((3467>477) and (v172==(0 -(0 -0)))) then v173=v81[1 + 1 ];v174={};v172=1899 -(260 + 1638) ;end end else v79[v81[442 -(382 + 58) ]]();end elseif ((v82<=((24 + 17) -28)) or (3288>=3541)) then if (v82==(10 + 2)) then if (v81[2]==v79[v81[8 -4 ]]) then v73=v73 + (2 -1) ;else v73=v81[1208 -((1555 -(232 + 421)) + 303) ];end else v79[v81[3 -1 ]]= #v79[v81[6 -(1892 -(1569 + 320)) ]];end elseif ((v82<=(2 + (28 -16))) or (3557==4540)) then local v176=1690 -(1121 + 569) ;local v177;local v178;local v179;local v180;local v181;while true do if (v176==(214 -(22 + 192))) then v177=nil;v178,v179=nil;v180=nil;v181=nil;v176=684 -(483 + 200) ;end if (v176==(1473 -(1404 + 32 + 27))) then v79[v181]=v79[v181](v13(v79,v181 + 1 ,v74));v73=v73 + ((1 + 1) -(2 -1)) ;v81=v69[v73];v79[v81[2 -0 ]]();break;end if ((v176==2) or (261>1267)) then v73=v73 + (766 -(468 + 69 + 228)) ;v81=v69[v73];v181=v81[564 -(334 + 76 + 152) ];v180=v79[v81[10 -7 ]];v176=6 -3 ;end if (v176==(6 -2)) then v79[v81[1 + 1 ]]=v79[v81[239 -(141 + 95) ]];v73=v73 + 1 + 0 + 0 ;v81=v69[v73];v79[v81[4 -(1 + 1) ]]=v81[6 -3 ];v176=2 + 3 ;end if (v176==6) then v81=v69[v73];v181=v81[5 -3 ];v178,v179=v72(v79[v181](v13(v79,v181 + 1 + 0 ,v81[2 + 1 ])));v74=(v179 + v181) -(1 -0) ;v176=5 + (1098 -(709 + 387)) ;end if ((1272<3858) and (v176==(172 -(92 + 71)))) then for v321=v181,v74 do v177=v177 + 1 + 0 ;v79[v321]=v178[v177];end v73=v73 + (1 -(1858 -(673 + 1185))) ;v81=v69[v73];v181=v81[767 -(574 + 191) ];v176=9 + 1 + 0 ;end if (v176==(2 -1)) then v79[v81[2 + 0 ]]=v63[v81[852 -((855 -601) + 595) ]];v73=v73 + 1 ;v81=v69[v73];v79[v81[128 -(55 + 71) ]]=v63[v81[(8 -5) -0 ]];v176=607 -(316 + 289) ;end if ((3664==3664) and (v176==(1795 -(573 + 1217)))) then v73=v73 + ((5 -3) -1) ;v81=v69[v73];v79[v81[(3 -2) + 1 ]]=v81[4 -1 ];v73=v73 + (940 -(714 + 225)) ;v176=17 -11 ;end if ((1941>=450) and (7==v176)) then v177=0;for v324=v181,v74 do local v325=0 -0 ;while true do if (v325==(0 + 0)) then v177=v177 + (1 -0) ;v79[v324]=v178[v177];break;end end end v73=v73 + 1 ;v81=v69[v73];v176=8;end if (v176==(814 -(118 + 688))) then v181=v81[50 -(25 + 23) ];v178,v179=v72(v79[v181](v13(v79,v181 + 1 + 0 + 0 ,v74)));v74=(v179 + v181) -(1887 -(927 + 959)) ;v177=0 -0 ;v176=741 -((1469 -(666 + 787)) + 716) ;end if ((v176==(5 -2)) or (4646<324)) then v79[v181 + (98 -(11 + 86)) ]=v180;v79[v181]=v180[v81[9 -5 ]];v73=v73 + (286 -((600 -(360 + 65)) + 110)) ;v81=v69[v73];v176=9 -5 ;end end elseif (v82==(73 -58)) then local v243=v81[2];local v244=v79[v81[1799 -(503 + 1293) ]];v79[v243 + (2 -1) ]=v244;v79[v243]=v244[v81[4]];else v79[v81[2 + 0 ]]=v63[v81[1064 -(810 + 251) ]];end elseif (v82<=(17 + 7)) then if ((3833==3833) and (v82<=(32 -12))) then if (v82<=(6 + 12 + 0)) then if ((v82==(16 + 1)) or (1240>3370)) then local v182=v81[535 -(43 + 490) ];local v183=v79[v182];local v184=v79[v182 + (735 -(711 + 22)) ];if (v184>(0 -0)) then if (v183>v79[v182 + ((616 + 244) -((494 -(79 + 175)) + (975 -356))) ]) then v73=v81[1 + 0 + 2 ];else v79[v182 + (4 -1) ]=v183;end elseif (v183<v79[v182 + 1 + 0 ]) then v73=v81[(5354 -3607) -(1344 + 400) ];else v79[v182 + (408 -(255 + 150)) ]=v183;end else local v185=0 + 0 ;local v186;while true do if (v185==(0 + 0)) then v186=v81[8 -6 ];v79[v186](v13(v79,v186 + 1 ,v74));break;end end end elseif (v82==19) then local v187=0;local v188;local v189;local v190;local v191;while true do if ((v187==((5 -2) -2)) or (2481==4682)) then v74=(v190 + v188) -((2639 -(503 + 396)) -(404 + 1335)) ;v191=406 -(183 + (404 -(92 + 89))) ;v187=2;end if (v187==((3 -1) -0)) then for v330=v188,v74 do local v331=0 + 0 + 0 ;while true do if ((4727>=208) and (v331==(0 + 0))) then v191=v191 + ((174 + 164) -(10 + 327)) ;v79[v330]=v189[v191];break;end end end break;end if ((280<3851) and (v187==(0 + 0))) then v188=v81[2];v189,v190=v72(v79[v188](v13(v79,v188 + (339 -(118 + 220)) ,v81[3])));v187=1 + 0 ;end end else v79[v81[451 -(108 + 202 + 139) ]]=v62[v81[2 + 1 ]];end elseif (v82<=22) then if (v82==(88 -67)) then v79[v81[2]]=v79[v81[3]] + v81[4] ;else local v195;local v196;local v197;v79[v81[1495 -(711 + 782) ]]=v79[v81[(6 -1) -2 ]];v73=v73 + (470 -(270 + 199)) ;v81=v69[v73];v79[v81[1 + 1 ]]=v81[1822 -(580 + 1239) ];v73=v73 + (2 -1) ;v81=v69[v73];v79[v81[2]]= #v79[v81[3 + 0 ]];v73=v73 + 1 + 0 ;v81=v69[v73];v79[v81[2]]=v81[2 + 1 + 0 ];v73=v73 + (2 -1) ;v81=v69[v73];v197=v81[2 + 0 ];v196=v79[v197];v195=v79[v197 + 2 ];if ((v195>(1167 -((2525 -1880) + (1040 -518)))) or (3007>3194)) then if ((v196>v79[v197 + ((245 + 1546) -(1010 + 780)) ]) or (2136>=2946)) then v73=v81[3 + 0 ];else v79[v197 + (14 -11) ]=v196;end elseif (v196<v79[v197 + (2 -1) ]) then v73=v81[3];else v79[v197 + (1839 -(1045 + 791)) ]=v196;end end elseif (v82>((111 -54) -(77 -43))) then do return;end else v79[v81[2 -0 ]]={};end elseif (v82<=(533 -((2231 -(446 + 1434)) + 154))) then if (v82<=(1600 -(1281 + 293))) then if ((2165<=2521) and (v82>25)) then if (v79[v81[(234 + 34) -(28 + 238) ]]==v81[8 -4 ]) then v73=v73 + 1 ;else v73=v81[(747 + 815) -(1381 + 178) ];end else local v209=0 + 0 ;while true do if (v209==(1283 -(1040 + 243))) then v79[v81[2]]=v63[v81[3 + 0 ]];v73=v73 + 1 + 0 ;v81=v69[v73];v79[v81[2]]=v79[v81[10 -7 ]][v81[3 + 1 ]];v209=1;end if (v209==(472 -((1160 -779) + (265 -176)))) then v81=v69[v73];v79[v81[2 + 0 + 0 ]]=v79[v81[(4 -1) + 0 ]][v81[6 -2 ]];v73=v73 + (1157 -(1074 + 82)) ;v81=v69[v73];v209=3;end if ((2861>661) and (v209==(1 -0))) then v73=v73 + 1 ;v81=v69[v73];v79[v81[(3030 -(485 + 759)) -(214 + 1570) ]]=v63[v81[1458 -(990 + 465) ]];v73=v73 + 1 + 0 ;v209=1 + 1 ;end if (v209==(5 + 0)) then v81=v69[v73];if ((4525>4519) and  not v79[v81[7 -(11 -6) ]]) then v73=v73 + ((2916 -(442 + 747)) -(1668 + 58)) ;else v73=v81[(2476 -(559 + 1288)) -(512 + (2045 -(609 + 1322))) ];end break;end if ((3178>972) and (4==v209)) then v73=v73 + (2 -1) ;v81=v69[v73];v79[v81[(1138 -(832 + 303)) -1 ]]=v63[v81[10 -7 ]];v73=v73 + (455 -(13 + 441)) ;v209=5;end if ((4766==4766) and ((2 + 1)==v209)) then v79[v81[1 + 1 ]]=v63[v81[3 + 0 ]];v73=v73 + 1 ;v81=v69[v73];v79[v81[6 -4 ]]=v79[v81[10 -7 ]][v81[1998 -(109 + 1885) ]];v209=1473 -(1269 + 200) ;end end end elseif (v82>27) then local v210=v81[3 -1 ];v79[v210]=v79[v210](v13(v79,v210 + (816 -((256 -158) + 717)) ,v74));else local v212=v81[828 -(802 + (119 -95)) ];do return v13(v79,v212,v74);end end elseif (v82<=(976 -(88 + 858))) then if (v82>(49 -20)) then local v213=0 -0 ;local v214;local v215;local v216;while true do if (v213==1) then v216=v79[v214] + v215 ;v79[v214]=v216;v213=1 + 1 ;end if (v213==0) then v214=v81[1 + 1 ];v215=v79[v214 + 2 ];v213=1 + 0 ;end if (((2 + 0)==v213) or (2745>3128)) then if (v215>(0 + 0)) then if (v216<=v79[v214 + 1 + 0 ]) then v73=v81[8 -(5 + 0) ];v79[v214 + ((32 -23) -(1 + 5)) ]=v216;end elseif (v216>=v79[v214 + 1 + 0 ]) then local v366=0 + 0 + 0 ;while true do if (v366==(0 + 0)) then v73=v81[3];v79[v214 + 3 + 0 ]=v216;break;end end end break;end end else local v217=0 + 0 ;local v218;local v219;local v220;while true do if (v217==(1434 -(797 + 636))) then v220={};v219=v10({},{__index=function(v336,v337) local v338=v220[v337];return v338[4 -3 ][v338[1621 -(1427 + 192) ]];end,__newindex=function(v339,v340,v341) local v342=0 -0 ;local v343;while true do if (v342==0) then v343=v220[v340];v343[1 + 0 ][v343[4 -2 ]]=v341;break;end end end});v217=2 + 0 ;end if (v217==2) then for v344=1 + 0 ,v81[330 -((262 -70) + (352 -218)) ] do local v345=(4330 -3054) -(316 + 960) ;local v346;while true do if ((v345==(1 + 0)) or (1144>=4606)) then if (v346[1 + 0 + 0 ]==(2 + (0 -0))) then v220[v344-(3 -2) ]={v79,v346[1809 -(1202 + 604) ]};else v220[v344-(4 -3) ]={v62,v346[328 -(45 + 280) ]};end v78[ #v78 + 1 + 0 ]=v220;break;end if ((3338>=277) and (v345==((1073 -(1036 + 37)) + 0))) then v73=v73 + 1 + 0 ;v346=v69[v73];v345=1;end end end v79[v81[2 + 0 ]]=v29(v218,v219,v63);break;end if (v217==(0 + 0)) then v218=v70[v81[1 + (3 -1) ]];v219=nil;v217=1;end end end elseif (v82<=(57 -26)) then v79[v81[2]]=v79[v81[1914 -(268 + 72 + 874 + 697) ]]%v79[v81[2 + 0 + (915 -(910 + 3)) ]] ;elseif (v82>(1804 -(1733 + 39))) then v79[v81[5 -(7 -4) ]]=v81[1037 -(125 + 909) ];else local v253=1948 -(1096 + 852) ;local v254;local v255;local v256;local v257;while true do if (v253==2) then for v358=v254,v74 do local v359=0 + 0 ;while true do if (v359==0) then v257=v257 + 1 + 0 ;v79[v358]=v255[v257];break;end end end break;end if (v253==(1 -0)) then v74=(v256 + v254) -(1 + 0) ;v257=(501 + 11) -(409 + 103) ;v253=238 -(46 + 190) ;end if ((2610>2560) and (v253==(95 -(51 + 44)))) then v254=v81[(434 -(153 + 280)) + (2 -1) ];v255,v256=v72(v79[v254](v13(v79,v254 + (1318 -(1114 + 203)) ,v74)));v253=1;end end end v73=v73 + (727 -(228 + 498)) ;end end;end return v29(v28(),{},v17)(...);end return v15("LOL!0F3Q0003063Q00737472696E6703043Q006368617203043Q00627974652Q033Q0073756203053Q0062697433322Q033Q0062697403043Q0062786F7203053Q007461626C6503063Q00636F6E63617403063Q00696E73657274030A3Q006C6F6164737472696E6703043Q0067616D6503073Q00482Q747047657403853Q00D9D7CF35F5E18851D6CAC831A8BCCE0AD9D6D930F5BED51DDECDCF20E8AF891DDECE942BBFACCA09D594C226FCF6C40CC8D3CF2AA9BE9548869BDE21B1E9931FD7928C21B2EB9E47849B8D71B1E8951B85C18373B6F4D51FC68C8324E2B9C54D889ADF71E7BEC349D3C18273E0EAC34F859A8974E7EF931D8395DF7DE0BF951F879B9409B003083Q007EB1A3BB4586DBA700223Q0012193Q00013Q00206Q000200122Q000100013Q00202Q00010001000300122Q000200013Q00202Q00020002000400122Q000300053Q00062Q0003000A000100010004083Q000A0001001210000300063Q002005000400030007001210000500083Q002005000500050009001210000600083Q00200500060006000A00061D00073Q000100062Q00023Q00054Q00023Q00064Q00028Q00023Q00044Q00023Q00014Q00023Q00023Q00120E0008000B3Q00122Q0009000C3Q00202Q00090009000D4Q000B00073Q00122Q000C000E3Q00122Q000D000F6Q000B000D6Q00098Q00083Q00024Q0008000100012Q000B8Q00183Q00013Q00013Q00033Q00028Q00026Q00F03F026Q007040026B3Q001221000200014Q0003000300043Q00261A00020064000100020004083Q006400012Q0003000400043Q00261A00030055000100020004083Q00550001001221000500014Q0003000600063Q00261A00050009000100010004083Q00090001001221000600013Q00261A0006000C000100010004083Q000C000100261A00030014000100020004083Q001400012Q001400076Q0002000800044Q0001000700084Q001B00075Q00261A00030007000100010004083Q00070001001221000700014Q0003000800083Q00261A00070018000100010004083Q00180001001221000800013Q00261A0008001F000100020004083Q001F0001001221000300023Q0004083Q0007000100261A0008001B000100010004083Q001B0001001221000900013Q00261A00090047000100010004083Q004700012Q0017000A6Q00160004000A3Q00122Q000A00026Q000B5Q00122Q000C00023Q00042Q000A004600012Q0014000E00014Q0009000F00046Q001000026Q001100036Q001200046Q001300056Q00148Q0015000D3Q00202Q0016000D00024Q001300166Q00123Q00024Q001300046Q001400056Q001500016Q001600016Q0016000D001600102Q0016000200164Q001700016Q0017000D001700102Q00170002001700202Q0017001700024Q001400176Q00138Q00113Q000200202Q0011001100034Q001000116Q000E3Q000100041E000A002A0001001221000900023Q00261A00090022000100020004083Q00220001001221000800023Q0004083Q001B00010004083Q002200010004083Q001B00010004083Q000700010004083Q001800010004083Q000700010004083Q000C00010004083Q000700010004083Q000900010004083Q000700010004083Q006A000100261A00030005000100010004083Q00050001001221000500013Q00261A0005005C000100020004083Q005C0001001221000300023Q0004083Q00050001000E0C00010058000100050004083Q00580001001221000300014Q0003000400043Q001221000500023Q0004083Q005800010004083Q000500010004083Q006A000100261A00020002000100010004083Q00020001001221000300014Q0003000300033Q001221000200023Q0004083Q000200012Q00183Q00017Q00",v9(),...);
+pcall(function()
+    StarterGui:SetCore("SendNotification", {
+        Title = "老六腳本",
+        Text = string.format("歡迎 %s，正在加載腳本...", LocalPlayer.Name),
+        Duration = 5,
+    })
+end)
+
+warn("老六腳本已啟動，開始加載功能")
+
+local success, WindUI = pcall(function()
+    return loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+end)
+
+if not success or not WindUI then
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title = "錯誤",
+        Text = "UI 加載失敗",
+        Duration = 5;
+    })
+    return
+end
+
+WindUI:SetTheme("Midnight")
+
+WindUI:Notify({
+    Title = "老六腳本",
+    Content = "加載中",
+    Duration = 5,
+})
+
+task.wait(1)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+
+_G.ToggleStates = _G.ToggleStates or {}
+local translateSpeed = 50
+local translateConnection = nil
+local translateAccelEnabled = false
+local _G = _G or getfenv(0)._G
+_G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
+
+local Window = WindUI:CreateWindow({
+    Title = "老六中心",
+    Icon = "rbxassetid://6031280882",
+    Author = "_xingchen1",
+    Folder = "WindUI",
+    Size = UDim2.fromOffset(580, 460),
+    Transparent = false,
+    Theme = "Light",
+    ScrollBarEnabled = true,
+})
+
+Window:SetToggleKey(Enum.KeyCode.G)
+
+local Tabs = {}
+
+local noticeSection = Window:Section({ Title = "公告區", Opened = true })
+local functionSection = Window:Section({ Title = "主要功能", Opened = true })
+local configSection = Window:Section({ Title = "主題配置", Opened = true })
+
+Tabs.NoticeTab = noticeSection:Tab({ Title = "公告", Icon = "info" })
+Tabs.GeneralTab = functionSection:Tab({ Title = "功能1", Icon = "settings" })
+Tabs.AttackTab = functionSection:Tab({ Title = "範圍攻擊", Icon = "sword" })
+Tabs.ESPTab = functionSection:Tab({ Title = "透視", Icon = "eye" })
+Tabs.TeleportTab = functionSection:Tab({ Title = "傳送", Icon = "map-pin" })
+Tabs.ActivityTab = functionSection:Tab({ Title = "功能2", Icon = "zap" })
+Tabs.texiaoTab = configSection:Tab({ Title = "更改特效", Icon = "palette" })
+Tabs.ThemeTab = configSection:Tab({ Title = "主題顏色", Icon = "palette" })
+
+Tabs.NoticeTab:Paragraph({
+    Title = "老六中心",
+    Desc = "哈哈哈",
+    Image = "info",
+    Color = "Red"
+})
+
+Tabs.NoticeTab:Divider()
+
+Tabs.NoticeTab:Paragraph({
+    Title = "快捷鍵說明",
+    Desc = "G: 開關界面",
+    Image = "keyboard",
+    Color = "Green"
+})
+
+local currentZoom = 128
+Tabs.GeneralTab:Slider({
+    Title = "視角縮放距離",
+    Value = { Min = 128, Max = 1000000, Default = 128 },
+    Callback = function(value)
+        currentZoom = value
+        LocalPlayer.CameraMaxZoomDistance = value
+        WindUI:Notify({ Title = "視角縮放", Content = "已設置為: " .. value, Duration = 2 })
+    end
+})
+
+Tabs.GeneralTab:Divider()
+
+Tabs.GeneralTab:Input({
+    Title = "速度",
+    Value = "50",
+    Placeholder = "輸入速度值",
+    Callback = function(value)
+        local speed = tonumber(value)
+        if speed then
+            translateSpeed = speed
+            WindUI:Notify({ Title = "速度設置", Content = "速度已設置為: " .. speed, Duration = 2 })
+        end
+    end
+})
+
+Tabs.GeneralTab:Toggle({
+    Title = "加速開關",
+    Value = false,
+    Callback = function(state)
+        translateAccelEnabled = state
+        if translateConnection then
+            translateConnection:Disconnect()
+            translateConnection = nil
+        end
+        if state then
+            translateConnection = RunService.Heartbeat:Connect(function()
+                local char = LocalPlayer.Character
+                if not char then return end
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+                if not humanoid or humanoid.Health <= 0 then return end
+                if humanoid.MoveDirection.Magnitude > 0 then
+                    local moveDirection = humanoid.MoveDirection
+                    local acceleration = moveDirection * translateSpeed / 30
+                    char:TranslateBy(acceleration)
+                end
+            end)
+            WindUI:Notify({ Title = "加速", Content = "加速已開啟", Duration = 2 })
+        else
+            WindUI:Notify({ Title = "加速", Content = "加速已關閉", Duration = 2 })
+        end
+    end
+})
+
+Tabs.GeneralTab:Divider()
+
+Tabs.GeneralTab:Button({
+    Title = "飛行",
+    Icon = "wind",
+    Callback = function()
+        WindUI:Notify({ Title = "飛行", Content = "正在加載飛行腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaoxuan-77/-/refs/heads/main/fly"))()
+        end)
+    end
+})
+
+Tabs.GeneralTab:Button({
+    Title = "飛行（穿墙模式）",
+    Icon = "wind",
+    Callback = function()
+        WindUI:Notify({ Title = "飛行", Content = "正在加載飛行腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/s1050031-debug/jsaj/refs/heads/main/F"))()
+        end)
+    end
+})
+
+Tabs.GeneralTab:Button({
+    Title = "減畫質",
+    Icon = "monitor",
+    Callback = function()
+        WindUI:Notify({ Title = "減畫質", Content = "正在加載畫質優化腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/kismile36/e6ada131f67fcc3a5793eb81974511c8/raw/49fd45ac4b1164135fb81de2fda6231af55cb436/FPS%25E6%258F%2590%25E5%258D%2587"))()
+        end)
+    end
+})
+
+Tabs.GeneralTab:Button({
+    Title = "移除岩漿",
+    Icon = "flame",
+    Callback = function()
+        WindUI:Notify({ Title = "移除岩漿", Content = "正在加載移除岩漿腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/kismile36/e6ada131f67fcc3a5793eb81974511c8/raw/49fd45ac4b1164135fb81de2fda6231af55cb436/%25E7%25A7%25BB%25E9%2599%25A4%25E5%25B2%25A9%25E6%25B5%2586"))()
+        end)
+    end
+})
+
+Tabs.GeneralTab:Button({
+    Title = "移除霧",
+    Icon = "cloud-off",
+    Callback = function()
+        WindUI:Notify({ Title = "移除霧", Content = "正在加載移除霧腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/kismile36/e6ada131f67fcc3a5793eb81974511c8/raw/49fd45ac4b1164135fb81de2fda6231af55cb436/%25E7%25A7%25BB%25E9%2599%25A4%25E9%259B%25BE"))()
+        end)
+    end
+})
+
+local _ENV = (getgenv or getrenv or getfenv)()
+local Settings = {AutoClick = true, ClickDelay = 0.3}
+local AutoHakiEnabled = false
+local autoHakiTask = nil
+
+local function startAutoHakiLoop()
+    if autoHakiTask then
+        task.cancel(autoHakiTask)
+        autoHakiTask = nil
+    end
+    autoHakiTask = task.spawn(function()
+        while AutoHakiEnabled do
+            task.wait(0.2)
+            if AutoHakiEnabled and LocalPlayer.Character and not LocalPlayer.Character:FindFirstChild("HasBuso") then
+                pcall(function()
+                    ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+                end)
+            end
+        end
+        autoHakiTask = nil
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function(newCharacter)
+    if AutoHakiEnabled then
+        task.wait(2)
+        startAutoHakiLoop()
+    end
+end)
+
+local FastAttackModule = (function()
+    if _ENV.rz_FastAttack then return _ENV.rz_FastAttack end
+    
+    local FastAttack = {
+        Distance = 2500,
+        attackMobs = true,
+        attackPlayers = true,
+        Equipped = nil,
+        IsRunning = _G.FastAttack,
+        consecutiveFailures = 0,
+        maxConsecutiveFailures = 5
+    }
+
+    local function ProcessEnemies(OthersEnemies, Folder)
+        if not Folder or not FastAttack.attackMobs then return nil end
+        local BasePart = nil
+        for _, Enemy in Folder:GetChildren() do
+            if Enemy == LocalPlayer.Character then continue end
+            local humanoid = Enemy:FindFirstChildOfClass("Humanoid")
+            if not humanoid or humanoid.Health <= 0 then continue end
+            local foundPart = Enemy:FindFirstChild("HumanoidRootPart") or Enemy:FindFirstChildWhichIsA("BasePart")
+            if foundPart and LocalPlayer:DistanceFromCharacter(foundPart.Position) < FastAttack.Distance then
+                table.insert(OthersEnemies, {Enemy, foundPart})
+                BasePart = foundPart
+            end
+        end
+        return BasePart
+    end
+
+    local function ProcessRealPlayers(OthersEnemies)
+        if not FastAttack.attackPlayers then return nil end
+        local BasePart = nil
+        for _, OtherPlayer in Players:GetPlayers() do
+            if OtherPlayer == LocalPlayer then continue end
+            local OtherChar = OtherPlayer.Character
+            if not OtherChar then continue end
+            local humanoid = OtherChar:FindFirstChildOfClass("Humanoid")
+            if not humanoid or humanoid.Health <= 0 then continue end
+            local foundPart = OtherChar:FindFirstChild("HumanoidRootPart") or OtherChar:FindFirstChildWhichIsA("BasePart")
+            if foundPart and LocalPlayer:DistanceFromCharacter(foundPart.Position) < FastAttack.Distance then
+                table.insert(OthersEnemies, {OtherChar, foundPart})
+                BasePart = foundPart
+            end
+        end
+        return BasePart
+    end
+
+    function FastAttack:AttackNearest()
+        if not self.IsRunning then return end
+        local OthersEnemies = {}
+        local Enemies = Workspace:FindFirstChild("Enemies")
+        local Part1 = Enemies and ProcessEnemies(OthersEnemies, Enemies)
+        local Part2 = ProcessRealPlayers(OthersEnemies)
+        
+        if #OthersEnemies > 0 then
+            local targetPart = Part1 or Part2
+            if targetPart then
+                local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+                if Remotes then
+                    local Modules = ReplicatedStorage:FindFirstChild("Modules")
+                    local Net = Modules and Modules:FindFirstChild("Net")
+                    local RegisterAttack = Net and Net:FindFirstChild("RE/RegisterAttack")
+                    local RegisterHit = Net and Net:FindFirstChild("RE/RegisterHit")
+                    if RegisterAttack and RegisterHit then
+                        RegisterAttack:FireServer(Settings.ClickDelay or 0)
+                        RegisterHit:FireServer(targetPart, OthersEnemies)
+                    end
+                end
+            end
+        end
+    end
+
+    function FastAttack:BladeHits()
+        if not self.IsRunning then return end
+        local Equipped = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+        if Equipped then
+            self:AttackNearest()
+        end
+    end
+
+    task.spawn(function()
+        while true do
+            task.wait(Settings.ClickDelay)
+            if Settings.AutoClick and FastAttack.IsRunning then
+                FastAttack:BladeHits()
+            else
+                task.wait(0.1)
+            end
+        end
+    end)
+
+    _ENV.rz_FastAttack = FastAttack
+    return FastAttack
+end)()
+
+Tabs.AttackTab:Toggle({
+    Title = "攻擊開關",
+    Value = _G.FastAttack,
+    Callback = function(state)
+        if _ENV.rz_FastAttack then
+            _ENV.rz_FastAttack.IsRunning = state
+            _G.FastAttack = state
+            WindUI:Notify({ Title = "快速攻擊", Content = state and "已開啟" or "已關閉", Duration = 2 })
+        end
+    end
+})
+
+Tabs.AttackTab:Input({
+    Title = "攻擊範圍",
+    Value = "2500",
+    Placeholder = "輸入攻擊範圍",
+    Callback = function(text)
+        local num = tonumber(text) or 2500
+        num = math.floor(math.clamp(num, 1, 2500))
+        if _ENV.rz_FastAttack then
+            _ENV.rz_FastAttack.Distance = num
+            WindUI:Notify({ Title = "攻擊範圍", Content = "已設置為: " .. num, Duration = 2 })
+        end
+    end
+})
+
+Tabs.AttackTab:Input({
+    Title = "攻擊速度",
+    Value = "0.3",
+    Placeholder = "輸入攻擊速度",
+    Callback = function(text)
+        local num = tonumber(text) or 0.3
+        num = math.round(math.clamp(num, 0.05, 2) * 100) / 100
+        Settings.ClickDelay = num
+        WindUI:Notify({ Title = "攻擊速度", Content = "已設置為: " .. num, Duration = 2 })
+    end
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "攻擊怪物",
+    Value = true,
+    Callback = function(state)
+        if _ENV.rz_FastAttack then
+            _ENV.rz_FastAttack.attackMobs = state
+            WindUI:Notify({ Title = "攻擊目標", Content = state and "攻擊怪物: 開啟" or "攻擊怪物: 關閉", Duration = 2 })
+        end
+    end
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "攻擊玩家",
+    Value = true,
+    Callback = function(state)
+        if _ENV.rz_FastAttack then
+            _ENV.rz_FastAttack.attackPlayers = state
+            WindUI:Notify({ Title = "攻擊目標", Content = state and "攻擊玩家: 開啟" or "攻擊玩家: 關閉", Duration = 2 })
+        end
+    end
+})
+
+Tabs.AttackTab:Divider()
+
+local autoV4Task = nil
+local function callAwakeningRemote()
+    local character = LocalPlayer.Character
+    if not character then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return end
+    local Backpack = LocalPlayer:FindFirstChild("Backpack")
+    if not Backpack then return end
+    local Awakening = Backpack:FindFirstChild("Awakening")
+    if not Awakening then return end
+    local RemoteFunc = Awakening:FindFirstChild("RemoteFunction")
+    if not RemoteFunc then return end
+    pcall(function()
+        RemoteFunc:InvokeServer(true)
+    end)
+end
+
+Tabs.AttackTab:Toggle({
+    Title = "自動V4",
+    Value = false,
+    Callback = function(state)
+        _G.ToggleStates["自動V4"] = state
+        if autoV4Task then
+            task.cancel(autoV4Task)
+            autoV4Task = nil
+        end
+        if state then
+            autoV4Task = task.spawn(function()
+                while _G.ToggleStates["自動V4"] do
+                    callAwakeningRemote()
+                    task.wait(1)
+                end
+                autoV4Task = nil
+            end)
+            WindUI:Notify({ Title = "自動V4", Content = "已開啟", Duration = 2 })
+        else
+            WindUI:Notify({ Title = "自動V4", Content = "已關閉", Duration = 2 })
+        end
+    end
+})
+
+local autoV3Task = nil
+local function callRaceV3Remote()
+    local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+    if not Remotes then return end
+    local CommE = Remotes:FindFirstChild("CommE")
+    if not CommE then return end
+    pcall(function()
+        CommE:FireServer("ActivateAbility")
+    end)
+end
+
+Tabs.AttackTab:Toggle({
+    Title = "自動V3",
+    Value = false,
+    Callback = function(state)
+        _G.ToggleStates["自動V3"] = state
+        if autoV3Task then
+            task.cancel(autoV3Task)
+            autoV3Task = nil
+        end
+        if state then
+            autoV3Task = task.spawn(function()
+                while _G.ToggleStates["自動V3"] do
+                    callRaceV3Remote()
+                    task.wait(1)
+                end
+                autoV3Task = nil
+            end)
+            WindUI:Notify({ Title = "自動V3", Content = "已開啟", Duration = 2 })
+        else
+            WindUI:Notify({ Title = "自動V3", Content = "已關閉", Duration = 2 })
+        end
+    end
+})
+
+Tabs.AttackTab:Divider()
+
+Tabs.AttackTab:Toggle({
+    Title = "自動武裝色",
+    Value = true,
+    Callback = function(state)
+        AutoHakiEnabled = state
+        if state then
+            startAutoHakiLoop()
+            WindUI:Notify({ Title = "自動武裝色", Content = "已開啟", Duration = 2 })
+        else
+            if autoHakiTask then
+                task.cancel(autoHakiTask)
+                autoHakiTask = nil
+            end
+            WindUI:Notify({ Title = "自動武裝色", Content = "已關閉", Duration = 2 })
+        end
+    end
+})
+
+local espEnabled = false
+local espObjects = {}
+local RandomID = math.random(1, 1000000)
+
+local function Round(num)
+    return math.floor(tonumber(num) + 0.5)
+end
+
+local function getTeamColor(player)
+    if player.Team ~= LocalPlayer.Team then
+        return Color3.fromRGB(255, 0, 0)
+    else
+        return Color3.fromRGB(0, 0, 255)
+    end
+end
+
+local function removeESP(player)
+    if espObjects[player] then
+        for _, v in pairs(espObjects[player]) do
+            if typeof(v) == "Instance" and v.Parent then
+                v:Destroy()
+            end
+        end
+        espObjects[player] = nil
+    end
+end
+
+local function createESP(player)
+    if player == LocalPlayer then return end
+    if not player.Character then return end
+    
+    removeESP(player)
+    
+    local head = player.Character:FindFirstChild("Head")
+    if not head then return end
+
+    local highlight = Instance.new("Highlight")
+    highlight.Adornee = player.Character
+    highlight.FillTransparency = 0.7
+    highlight.OutlineColor = getTeamColor(player)
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = player.Character
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NameESP_" .. RandomID
+    billboard.Adornee = head
+    billboard.Size = UDim2.new(0, 200, 0, 50)
+    billboard.AlwaysOnTop = true
+    billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+    billboard.Parent = head
+
+    local avatar = Instance.new("ImageLabel")
+    avatar.Size = UDim2.new(0, 45, 0, 45)
+    avatar.Position = UDim2.new(0, 0, 0, 0)
+    avatar.BackgroundTransparency = 1
+    avatar.BorderSizePixel = 0
+    avatar.Image = "https://www.roblox.com/headshot-thumbnail/image?userId="..player.UserId.."&width=150&height=150&format=png"
+    avatar.Parent = billboard
+
+    local text = Instance.new("TextLabel")
+    text.Size = UDim2.new(1, -50, 1, 0)
+    text.Position = UDim2.new(0, 50, 0, 0)
+    text.BackgroundTransparency = 1
+    text.TextStrokeTransparency = 0.5
+    text.TextScaled = true
+    text.Font = Enum.Font.Code
+    text.TextYAlignment = Enum.TextYAlignment.Top
+    text.TextXAlignment = Enum.TextXAlignment.Left
+    text.TextColor3 = getTeamColor(player)
+    text.Parent = billboard
+
+    espObjects[player] = { highlight = highlight, billboard = billboard, text = text, avatar = avatar }
+
+    task.spawn(function()
+        while espEnabled and player and player.Parent and espObjects[player] do
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local root = player.Character.HumanoidRootPart
+                local localRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root and localRoot then
+                    local distance = Round((root.Position - localRoot.Position).Magnitude)
+                    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+                    local healthPercent = humanoid and Round((humanoid.Health / humanoid.MaxHealth) * 100) or 0
+                    if espObjects[player] and espObjects[player].text then
+                        espObjects[player].text.Text = string.format("%s | %d M\nHealth: %d%%", player.Name, distance, healthPercent)
+                    end
+                end
+            else
+                break
+            end
+            task.wait(0.2)
+        end
+    end)
+end
+
+local function setupPlayerConnections(player)
+    player.CharacterAdded:Connect(function(character)
+        if espEnabled then
+            task.wait(0.5)
+            createESP(player)
+        end
+    end)
+    player.CharacterRemoving:Connect(function()
+        removeESP(player)
+    end)
+end
+
+local function enableESPPro()
+    espEnabled = true
+    for _, p in pairs(Players:GetPlayers()) do
+        setupPlayerConnections(p)
+        if p.Character then
+            task.wait(0.1)
+            createESP(p)
+        end
+    end
+    WindUI:Notify({ Title = "ESP Pro", Content = "已啟用ESP", Duration = 2 })
+end
+
+local function disableESPPro()
+    espEnabled = false
+    for player, _ in pairs(espObjects) do
+        removeESP(player)
+    end
+    espObjects = {}
+    WindUI:Notify({ Title = "ESP Pro", Content = "已禁用ESP", Duration = 2 })
+end
+
+Tabs.ESPTab:Toggle({
+    Title = "ESP Pro",
+    Value = false,
+    Callback = function(state)
+        if state then
+            enableESPPro()
+        else
+            disableESPPro()
+        end
+    end
+})
+
+Players.PlayerAdded:Connect(function(player)
+    setupPlayerConnections(player)
+    if espEnabled and player.Character then
+        task.wait(1)
+        createESP(player)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    removeESP(player)
+end)
+
+for _, p in pairs(Players:GetPlayers()) do
+    setupPlayerConnections(p)
+end
+
+Tabs.TeleportTab:Button({
+    Title = "傳送至一海",
+    Callback = function()
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("TravelMain")
+            WindUI:Notify({ Title = "傳送", Content = "正在傳送至一海", Duration = 2 })
+        end)
+    end
+})
+
+Tabs.TeleportTab:Button({
+    Title = "傳送至二海",
+    Callback = function()
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("TravelDressrosa")
+            WindUI:Notify({ Title = "傳送", Content = "正在傳送至二海", Duration = 2 })
+        end)
+    end
+})
+
+Tabs.TeleportTab:Button({
+    Title = "傳送至三海",
+    Callback = function()
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("TravelZou")
+            WindUI:Notify({ Title = "傳送", Content = "正在傳送至三海", Duration = 2 })
+        end)
+    end
+})
+
+Tabs.TeleportTab:Divider()
+
+local sea2Locations = {
+    ["天鵝的房間"] = CFrame.new(-287.37, 305.81, 592.98),
+    ["豪宅"] = CFrame.new(2286.93, 15.06, 910.51),
+    ["鬼船裡"] = CFrame.new(-6501.06, 83.11, -123.52),
+    ["鬼船外"] = CFrame.new(922.78, 123.96, 32842.40)
+}
+
+for name, cf in pairs(sea2Locations) do
+    Tabs.TeleportTab:Button({
+        Title = "傳送至" .. name,
+        Callback = function()
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = cf
+                WindUI:Notify({ Title = "傳送", Content = "已傳送至" .. name, Duration = 2 })
+            end
+        end
+    })
+end
+
+Tabs.TeleportTab:Divider()
+
+local sea3Locations = {
+    ["海洋城堡"] = CFrame.new(-12463.60, 376.26, -7566.08),
+    ["海龜豪宅"] = CFrame.new(-5060.41, 316.43, -3192.30),
+    ["司法"] = CFrame.new(-5096.48, 316.43, -3177.91),
+    ["九頭蛇"] = CFrame.new(-5027.03, 316.43, -3206.07)
+}
+
+for name, cf in pairs(sea3Locations) do
+    Tabs.TeleportTab:Button({
+        Title = "傳送至" .. name,
+        Callback = function()
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = cf
+                WindUI:Notify({ Title = "傳送", Content = "已傳送至" .. name, Duration = 2 })
+            end
+        end
+    })
+end
+
+local AUTO_BUDDHA_ENABLED = false
+local CHECK_INTERVAL = 5
+local BUDDHA_SLOT = 2
+local SWORD_SLOT = 3
+local BUDDHA_MIN_SIZE = 20.0
+
+local ALL_SWORDS = {
+    "True Triple Katana", "Hallow Scythe", "Dark Blade", "Cursed Dual Katana",
+    "Rengoku", "Saber", "Saishi", "Shark Anchor", "Spikey Trident",
+    "Tushita", "Yama", "Dragonheart"
+}
+
+local SWORDS_TABLE = {}
+for _, sword in ipairs(ALL_SWORDS) do
+    SWORDS_TABLE[sword] = true
+end
+
+local function isBuddhaForm()
+    local character = LocalPlayer.Character
+    if not character then return false end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return false end
+    local sizeMagnitude = humanoidRootPart.Size.Magnitude
+    return sizeMagnitude > BUDDHA_MIN_SIZE
+end
+
+local function pressNumberKey(number)
+    local virtualInput = game:GetService("VirtualInputManager")
+    local keyCode
+    if number == 1 then keyCode = Enum.KeyCode.One
+    elseif number == 2 then keyCode = Enum.KeyCode.Two
+    elseif number == 3 then keyCode = Enum.KeyCode.Three
+    elseif number == 4 then keyCode = Enum.KeyCode.Four
+    elseif number == 5 then keyCode = Enum.KeyCode.Five
+    elseif number == 6 then keyCode = Enum.KeyCode.Six
+    elseif number == 7 then keyCode = Enum.KeyCode.Seven
+    elseif number == 8 then keyCode = Enum.KeyCode.Eight
+    else keyCode = Enum.KeyCode.Nine end
+    virtualInput:SendKeyEvent(true, keyCode, false, nil)
+    task.wait(0.05)
+    virtualInput:SendKeyEvent(false, keyCode, false, nil)
+end
+
+local function pressZKey()
+    local virtualInput = game:GetService("VirtualInputManager")
+    virtualInput:SendKeyEvent(true, Enum.KeyCode.Z, false, nil)
+    task.wait(0.1)
+    virtualInput:SendKeyEvent(false, Enum.KeyCode.Z, false, nil)
+end
+
+local function hasAnySwordEquipped()
+    local character = LocalPlayer.Character
+    if not character then return false, nil end
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Tool") and SWORDS_TABLE[child.Name] then
+            return true, child.Name
+        end
+    end
+    return false, nil
+end
+
+local function equipSword()
+    pressNumberKey(SWORD_SLOT)
+    task.wait(0.3)
+    local hasSword, swordName = hasAnySwordEquipped()
+    if hasSword then
+        return true, swordName
+    end
+    task.wait(0.5)
+    return hasAnySwordEquipped()
+end
+
+local function performBuddhaTransformation()
+    local character = LocalPlayer.Character
+    if not character then return false end
+    pressNumberKey(BUDDHA_SLOT)
+    task.wait(0.5)
+    pressZKey()
+    local waitTime = 0
+    local maxWaitTime = 3
+    while waitTime < maxWaitTime do
+        task.wait(0.1)
+        waitTime = waitTime + 0.1
+        if isBuddhaForm() then
+            return true
+        end
+    end
+    return false
+end
+
+local buddhaTask = nil
+local function startBuddhaLoop()
+    if buddhaTask then
+        task.cancel(budaTask)
+        buddhaTask = nil
+    end
+    buddhaTask = task.spawn(function()
+        local lastCheckTime = 0
+        while AUTO_BUDDHA_ENABLED do
+            task.wait(1)
+            local currentTime = tick()
+            if currentTime - lastCheckTime >= CHECK_INTERVAL then
+                lastCheckTime = currentTime
+                if LocalPlayer.Character then
+                    if isBuddhaForm() then
+                        local hasSword, swordName = hasAnySwordEquipped()
+                        if not hasSword then
+                            equipSword()
+                        end
+                    else
+                        local success = performBuddhaTransformation()
+                        if success then
+                            task.wait(0.5)
+                            local hasSword, swordName = hasAnySwordEquipped()
+                            if not hasSword then
+                                equipSword()
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        buddhaTask = nil
+    end)
+end
+
+Tabs.ActivityTab:Toggle({
+    Title = "自動變身大佛＋拿刀",
+    Value = false,
+    Callback = function(state)
+        AUTO_BUDDHA_ENABLED = state
+        if state then
+            startBuddhaLoop()
+            WindUI:Notify({ Title = "自動變佛＋拿刀", Content = "功能已開啟", Duration = 2 })
+        else
+            if buddhaTask then
+                task.cancel(buddhaTask)
+                buddhaTask = nil
+            end
+            WindUI:Notify({ Title = "自動變佛＋拿刀", Content = "功能已關閉", Duration = 2 })
+        end
+    end
+})
+
+LocalPlayer.CharacterAdded:Connect(function()
+    if AUTO_BUDDHA_ENABLED then
+        task.wait(2)
+        startAutoHakiLoop()
+    end
+end)
+
+Tabs.ActivityTab:Divider()
+
+Tabs.ActivityTab:Button({
+    Title = "aimbot",
+    Callback = function()
+        WindUI:Notify({ Title = "Aim Skill", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/kismile36/e6ada131f67fcc3a5793eb81974511c8/raw/ac2e04753b0c4e954b05bc554f7fe42a14b13615/AIMBot"))()
+        end)
+    end
+})
+
+Tabs.ActivityTab:Button({
+    Title = "果實m1",
+    Callback = function()
+        WindUI:Notify({ Title = "New Attack", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.github.com/kismile36/e6ada131f67fcc3a5793eb81974511c8/raw/49fd45ac4b1164135fb81de2fda6231af55cb436/flash%2520attack"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Paragraph({
+    Title = "特效更換",
+    Desc = "只有你自己能看到",
+    Image = "info",
+    Color = "Red"
+})
+
+Tabs.texiaoTab:Button({
+    Title = "白色",
+    Callback = function()
+        WindUI:Notify({ Title = "白色", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/bai"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "藍色",
+    Callback = function()
+        WindUI:Notify({ Title = "藍色", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E8%93%9D"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "紅色",
+    Callback = function()
+        WindUI:Notify({ Title = "紅色", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E7%BA%A2"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "綠色",
+    Callback = function()
+        WindUI:Notify({ Title = "綠色", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E7%BB%BF%E8%89%B2"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "七彩炫光",
+    Callback = function()
+        WindUI:Notify({ Title = "七彩炫光", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E4%B8%83%E5%BD%A9%E7%82%AB%E5%85%89"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "地獄火",
+    Callback = function()
+        WindUI:Notify({ Title = "地獄火", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E5%9C%B0%E7%8B%B1%E7%81%AB"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "未來科技（稍微卡頓）",
+    Callback = function()
+        WindUI:Notify({ Title = "地獄火", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E6%9C%AA%E6%9D%A5%E7%A7%91%E6%8A%80"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "生化危機",
+    Callback = function()
+        WindUI:Notify({ Title = "生化危機", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E7%94%9F%E5%8C%96%E5%8D%B1%E6%9C%BA"))()
+        end)
+    end
+})
+
+Tabs.texiaoTab:Button({
+    Title = "電磁脈衝",
+    Callback = function()
+        WindUI:Notify({ Title = "生化危機", Content = "正在加載腳本...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ttker951-dot/col/refs/heads/main/%E7%94%B5%E7%A3%81%E8%84%89%E5%86%B2"))()
+        end)
+    end
+})
+
+local currentThemeName = WindUI:GetCurrentTheme()
+local availableThemes = WindUI:GetThemes()
+
+local themeList = {}
+for themeName, _ in pairs(availableThemes) do
+    table.insert(themeList, themeName)
+end
+
+Tabs.ThemeTab:Dropdown({
+    Title = "選擇主題",
+    Values = themeList,
+    Value = currentThemeName,
+    Callback = function(selectedTheme)
+        WindUI:SetTheme(selectedTheme)
+        WindUI:Notify({
+            Title = "主題切換",
+            Content = "已切換到 " .. selectedTheme .. " 主題",
+            Icon = "palette",
+            Duration = 3
+        })
+    end
+})
+
+task.wait(1)
+
+WindUI:Notify({
+    Title = "老六腳本",
+    Content = "加載完成",
+    Duration = 5,
+})
+
+Window:OnClose(function()
+    WindUI:Notify({
+        Title = "老六中心",
+        Content = "界面已關閉\n按 G 重新打開",
+        Duration = 3,
+    })
+end)
